@@ -1,0 +1,944 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ocrud">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis应用-Feed功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis应用-Feed功能">
+<meta property="og:url" content="https://ocrud.com/2022/04/12/Redis%E5%BA%94%E7%94%A8-Feed%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:site_name" content="Ocrud">
+<meta property="og:description" content="Redis应用-Feed功能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+<meta property="article:published_time" content="2022-04-12T10:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-12T07:03:39.323Z">
+<meta property="article:author" content="ocrud">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Redis应用-Feed功能 - Ocrud</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ocrud.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":"https://lapi.ocrud.com","path":"window.location.pathname","ignore_local":false,"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA"}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ocrud</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                整理
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/archives/">
+                    
+                    归档
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/categories/">
+                    
+                    分类
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/tags/">
+                    
+                    标签
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                生活
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/">
+                    
+                    书单
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/movies/">
+                    
+                    影单
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                工具
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/file/index">
+                    
+                    文件预览
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://file.ocrud.com/">
+                    
+                    个人网盘
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://life.ocrud.com/">
+                    
+                    听听歌曲
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/dog/dog.html">
+                    
+                    舔狗日记
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.processon.com/">
+                    
+                    在线绘图
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://app.diagrams.net/">
+                    
+                    在线绘图2
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://ocrud.com/nav/#/sim">
+                <i class="iconfont icon-link-fill"></i>
+                导航
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://cdn.ocrud.com/blog/bg15.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Redis应用-Feed功能</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-12 18:00" pubdate>
+          2022年4月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis应用-Feed功能</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Feed功能"><a href="#Feed功能" class="headerlink" title="Feed功能"></a>Feed功能</h1><p>在互联网领域，尤其现在的移动互联网时代，Feed流产品是非常常见的，比如我们每天都会用到的朋友圈，微博，就是一种非常典型的Feed流产品，还有图片分享网站Pinterest，花瓣网等又是另一种形式的Feed流产品。除此之外，很多App的都会有一个模块，要么叫动态，要么叫消息广场，这些也是Feed流产品，可以说，Feed流产品是遍布天下所有的App中。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>我们在讲如何设计Feed流系统之前，先来看一下Feed流中的一些概念：</p>
+<ul>
+<li>Feed：Feed流中的每一条状态或者消息都是Feed，比如朋友圈中的一个状态就是一个Feed，微博中的一条微博就是一个Feed。</li>
+<li>Feed流：持续更新并呈现给用户内容的信息流。每个人的朋友圈，微博关注页等等都是一个Feed流。</li>
+<li>Timeline：Timeline其实是一种Feed流的类型，微博，朋友圈都是Timeline类型的Feed流，但是由于Timeline类型出现最早，使用最广泛，最为人熟知，有时候也用Timeline来表示Feed流。</li>
+<li>关注页Timeline：展示其他人Feed消息的页面，比如朋友圈，微博的首页等。</li>
+<li>个人页Timeline：展示自己发送过的Feed消息的页面，比如微信中的相册，微博的个人页等。</li>
+</ul>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><p>Feed流系统有一些非常典型的特点，比如：</p>
+<ul>
+<li>多账号内容流：Feed流系统中肯定会存在成千上万的账号，账号之间可以关注，取关，加好友和拉黑等操作。只要满足这一条，那么就可以当做Feed流系统来设计。</li>
+<li>非稳定的账号关系：由于存在关注，取关等操作，所以系统中的用户之间的关系就会一直在变化，是一种非稳定的状态。</li>
+<li>读写比例100:1：读写严重不平衡，读多写少，一般读写比例在10：1，甚至100：1以上。</li>
+<li>消息必达性要求高：比如发送了一条朋友圈后，结果部分朋友看到了，部分朋友没看到，如果偏偏女朋友没看到，那么可能会产生很严重的感情矛盾，后果很严重。</li>
+</ul>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><p>Feed流的分类有很多种，但最常见的分类有两种：</p>
+<ul>
+<li><strong>Timeline：按发布的时间顺序排序，先发布的先看到，后发布的排列在最顶端，类似于微信朋友圈，微博等。这也是一种最常见的形式。产品如果选择Timeline类型，那么就是认为<code>Feed流中的Feed不多，但是每个Feed都很重要，都需要用户看到</code>。</strong></li>
+<li>Rank：按某个非时间的因子排序，一般是按照用户的喜好度排序，用户最喜欢的排在最前面，次喜欢的排在后面。这种一般假定用户可能看到的Feed非常多，而用户花费在这里的时间有限，那么就为用户选择出用户最想看的Top N结果，场景的应用场景有图片分享、新闻推荐类、商品推荐等。</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p><strong>解决Feed流最核心的两个问题：一个是存储，另一个是推送</strong></p>
+<h3 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h3><p>因为该项目中Feed比较简单，就类比于空间说说，因此可以使用MySQL关系型数据库存储，如果对于数据结构比较复杂的Feed流就要使用NoSQL数据库，这样存储更方便与高效，比如MongoDB或者HBase。</p>
+<h3 id="推送"><a href="#推送" class="headerlink" title="推送"></a>推送</h3><p>在推送方案里面的，有三种方案，分别是：</p>
+<ul>
+<li>拉方案：也称为<code>读扩散</code>，用户主动去拉取关注人的Feed内容</li>
+<li><strong>推方案：也成为<code>写扩散</code>，当用户添加Feed时，会自动将Feed通知给关注的人（优选）</strong></li>
+</ul>
+<p><strong>使用Redis Sorted Sets（方便按时间排序Timeline）维护粉丝的Feed集合，当博主添加Feed时，主动将内容推送到粉丝的Feed集合中，这样用户可以很方便快速从集合中读取</strong></p>
+<ul>
+<li>推拉结合：比如微博，大部分用户的账号关系都是几百个，但是有个别用户是1000万以上才使用。</li>
+</ul>
+<h3 id="表结构"><a href="#表结构" class="headerlink" title="表结构"></a>表结构</h3><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `t_feeds` (
+`id`  <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> AUTO_INCREMENT ,
+`content`  <span class="hljs-type">varchar</span>(<span class="hljs-number">500</span>) <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8mb4 <span class="hljs-keyword">COLLATE</span> utf8mb4_general_ci <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;内容&#x27;</span> ,
+`fk_user_id`  <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> ,
+`praise_amount`  <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;点赞数量&#x27;</span> ,
+`comment_amount`  <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;评论数量&#x27;</span> ,
+`fk_restaurant_id`  <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> ,
+`create_date`  datetime <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> ,
+`update_date`  datetime <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> ,
+`is_valid`  tinyint(<span class="hljs-number">1</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> ,
+<span class="hljs-keyword">PRIMARY</span> KEY (`id`)
+)
+ENGINE<span class="hljs-operator">=</span>InnoDB
+<span class="hljs-keyword">DEFAULT</span> <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span><span class="hljs-operator">=</span>utf8mb4 <span class="hljs-keyword">COLLATE</span><span class="hljs-operator">=</span>utf8mb4_general_ci
+AUTO_INCREMENT<span class="hljs-operator">=</span><span class="hljs-number">14</span>
+ROW_FORMAT<span class="hljs-operator">=</span>COMPACT;</code></pre></div>
+
+<h3 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h3><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment">    * 变更 Feed</span>
+<span class="hljs-comment">    *</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> followingUserId 关注的好友的 ID</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> userId          登录用户</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> type            1 关注 0 取关</span>
+<span class="hljs-comment">    */</span>
+   <span class="hljs-meta">@Override</span>
+   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addFollowingFeeds</span><span class="hljs-params">(Integer userId, Integer followingUserId, <span class="hljs-type">int</span> type)</span> &#123;
+       <span class="hljs-comment">// 请选择关注的好友</span>
+       Assert.isFalse(followingUserId == <span class="hljs-literal">null</span> || followingUserId &lt; <span class="hljs-number">1</span>, <span class="hljs-string">&quot;请选择关注的好友&quot;</span>);
+       <span class="hljs-comment">// 获取关注/取关所有 Feed</span>
+       List&lt;TFeeds&gt; followingFeeds = list(<span class="hljs-keyword">new</span> <span class="hljs-title class_">LambdaQueryWrapper</span>&lt;TFeeds&gt;().eq(TFeeds::getFkUserId, followingUserId));
+       <span class="hljs-keyword">if</span> (followingFeeds == <span class="hljs-literal">null</span> || followingFeeds.isEmpty()) &#123;
+           <span class="hljs-keyword">return</span>;
+       &#125;
+       <span class="hljs-comment">// 我关注的 FeedsKey</span>
+       <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> Constant.REDIS_FOLLOWING_FEEDS_KEY + userId;
+       <span class="hljs-comment">// 取关</span>
+       <span class="hljs-keyword">if</span> (type == <span class="hljs-number">0</span>) &#123;
+           List&lt;Integer&gt; feedIds = followingFeeds.stream().map(BaseEntity::getId).collect(Collectors.toList());
+           redisTemplate.opsForZSet().remove(key, feedIds.toArray(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Integer</span>[]&#123;&#125;));
+           <span class="hljs-comment">// 关注</span>
+       &#125; <span class="hljs-keyword">else</span> &#123;
+           Set&lt;ZSetOperations.TypedTuple&gt; typedTuples = followingFeeds.stream().map(feed -&gt; &#123;
+               <span class="hljs-keyword">if</span> (feed.getCreateDate() == <span class="hljs-literal">null</span>) &#123;
+                   feed.setCreateDate(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>());
+               &#125;
+               <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DefaultTypedTuple</span>&lt;&gt;(feed.getId(), (<span class="hljs-type">double</span>) feed.getCreateDate().getTime());
+           &#125;).collect(Collectors.toSet());
+           redisTemplate.opsForZSet().add(key, typedTuples);
+       &#125;
+   &#125;
+
+   <span class="hljs-meta">@Override</span>
+   <span class="hljs-keyword">public</span> Dict <span class="hljs-title function_">delete</span><span class="hljs-params">(Integer id, Integer userId)</span> &#123;
+       <span class="hljs-comment">// 请选择要删除的 Feed</span>
+       Assert.isFalse(id == <span class="hljs-literal">null</span> || id &lt; <span class="hljs-number">1</span>, <span class="hljs-string">&quot;请选择要删除的Feed&quot;</span>);
+       <span class="hljs-comment">// 获取登录用户</span>
+       <span class="hljs-comment">// 获取 Feed 内容</span>
+       <span class="hljs-type">TFeeds</span> <span class="hljs-variable">feeds</span> <span class="hljs-operator">=</span> getById(id);
+       <span class="hljs-comment">// 判断 Feed 是否已被删除且只能删除自己的 Feed</span>
+       Assert.isFalse(feeds == <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;该Feed已被删除&quot;</span>);
+       Assert.isFalse(feeds.getFkUserId().equals(userId), <span class="hljs-string">&quot;只能删除自己的Feed&quot;</span>);
+       <span class="hljs-comment">// 删除</span>
+       <span class="hljs-keyword">if</span> (removeById(id)) &#123;
+           <span class="hljs-comment">// 将内容从粉丝的集合中删除  -- 异步消息队列优化</span>
+           Set&lt;Integer&gt; followersIds = tFollowService.findFollowers(userId);
+           followersIds.forEach(follower -&gt; &#123;
+               <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> Constant.REDIS_FOLLOWING_FEEDS_KEY.concat(follower + <span class="hljs-string">&quot;&quot;</span>);
+               redisTemplate.opsForZSet().remove(key, feeds.getId());
+           &#125;);
+           <span class="hljs-keyword">return</span> Dict.create().set(<span class="hljs-string">&quot;code&quot;</span>, <span class="hljs-string">&quot;200&quot;</span>).set(<span class="hljs-string">&quot;msg&quot;</span>, <span class="hljs-string">&quot;删除成功&quot;</span>);
+       &#125;<span class="hljs-keyword">else</span> &#123;
+           <span class="hljs-keyword">return</span> Dict.create().set(<span class="hljs-string">&quot;code&quot;</span>, <span class="hljs-string">&quot;500&quot;</span>).set(<span class="hljs-string">&quot;msg&quot;</span>, <span class="hljs-string">&quot;删除失败&quot;</span>);
+       &#125;
+   &#125;
+
+   <span class="hljs-comment">/**</span>
+<span class="hljs-comment">    * 根据时间由近到远，每次查询 10 条 Feed</span>
+<span class="hljs-comment">    *</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> page 页码</span>
+<span class="hljs-comment">    */</span>
+   <span class="hljs-meta">@Override</span>
+   <span class="hljs-keyword">public</span> Page&lt;TFeeds&gt; <span class="hljs-title function_">selectForPage</span><span class="hljs-params">(Integer page, Integer pageSize, Integer userId)</span> &#123;
+       <span class="hljs-keyword">if</span> (page == <span class="hljs-literal">null</span>) &#123;
+           page = <span class="hljs-number">1</span>;
+
+       &#125;
+       <span class="hljs-keyword">if</span> (pageSize == <span class="hljs-literal">null</span>) &#123;
+           pageSize = <span class="hljs-number">10</span>;
+       &#125;
+       <span class="hljs-comment">// 我关注的好友的 FeedsKey</span>
+       <span class="hljs-type">String</span> <span class="hljs-variable">redisFeedKey</span> <span class="hljs-operator">=</span> Constant.REDIS_FOLLOWING_FEEDS_KEY + userId;
+       <span class="hljs-comment">// SortedSet 的 ZREVRANGE 命令是闭区间(左闭右闭)</span>
+       <span class="hljs-type">long</span> <span class="hljs-variable">start</span> <span class="hljs-operator">=</span> (page - <span class="hljs-number">1</span>) * pageSize;
+       <span class="hljs-type">long</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> page * pageSize - <span class="hljs-number">1</span>;
+       <span class="hljs-comment">// 获取 10 条 Feed ID</span>
+       Set&lt;Integer&gt; feedIds = redisTemplate.opsForZSet().reverseRange(redisFeedKey, start, end);
+       <span class="hljs-keyword">if</span> (feedIds == <span class="hljs-literal">null</span> || feedIds.isEmpty()) &#123;
+           <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Page</span>&lt;&gt;();
+       &#125;
+       Map&lt;Integer, TUser&gt; userMap = tUserService.list().stream().collect(Collectors.toMap(TUser::getId, Function.identity()));
+       <span class="hljs-comment">// 查询结果</span>
+       Page&lt;TFeeds&gt; result = page(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Page</span>&lt;&gt;(page, pageSize), <span class="hljs-keyword">new</span> <span class="hljs-title class_">LambdaQueryWrapper</span>&lt;TFeeds&gt;().in(TFeeds::getId, feedIds));
+       <span class="hljs-comment">// 翻译字典</span>
+       result.getRecords().forEach(feed -&gt; feed.setUser(userMap.get(feed.getFkUserId())));
+       <span class="hljs-keyword">return</span> result;
+   &#125;</code></pre></div>
+
+<h3 id="调用链"><a href="#调用链" class="headerlink" title="调用链"></a>调用链</h3><p class="note note-success">关注/取关</p>
+<p class="note note-info">http://localhost:8080/follow?userId=2&followUserId=1&isFollowed=1</p>
+
+<p class="note note-success">查询feed列表</p>
+<p class="note note-info">http://localhost:8080/selectFeedPage?userId=2</p>
+
+<p class="note note-success">删除feed</p>
+<p class="note note-info">http://localhost:8080/delete?id=1&userId=1</p>
+
+
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>项目地址 <a target="_blank" rel="noopener" href="https://github.com/hugqq/Redis">https://github.com/hugqq/Redis</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/redis/" class="category-chain-item">redis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/redis/">#redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis应用-Feed功能</div>
+      <div>https://ocrud.com/2022/04/12/Redis应用-Feed功能/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ocrud</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月12日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/13/Redis%E5%BA%94%E7%94%A8-%E7%94%A8%E6%88%B7%E7%AD%BE%E5%88%B0/" title="Redis应用-用户签到">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis应用-用户签到</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/11/Redis%E5%BA%94%E7%94%A8-%E5%A5%BD%E5%8F%8B%E5%8A%9F%E8%83%BD/" title="Redis应用-好友功能">
+                        <span class="hidden-mobile">Redis应用-好友功能</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.17/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA","path":"window.location.pathname","placeholder":"来了就说句话把!","avatar":"mp","meta":["nick","mail"],"requiredFields":["nick","mail"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      黑ICP备18004540号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

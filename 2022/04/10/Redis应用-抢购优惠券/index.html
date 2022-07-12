@@ -1,0 +1,1665 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ocrud">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis应用-抢购优惠券">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis应用-抢购优惠券">
+<meta property="og:url" content="https://ocrud.com/2022/04/10/Redis%E5%BA%94%E7%94%A8-%E6%8A%A2%E8%B4%AD%E4%BC%98%E6%83%A0%E5%88%B8/index.html">
+<meta property="og:site_name" content="Ocrud">
+<meta property="og:description" content="Redis应用-抢购优惠券">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+<meta property="article:published_time" content="2022-04-10T10:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-12T07:03:39.325Z">
+<meta property="article:author" content="ocrud">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Redis应用-抢购优惠券 - Ocrud</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ocrud.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":"https://lapi.ocrud.com","path":"window.location.pathname","ignore_local":false,"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA"}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ocrud</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                整理
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/archives/">
+                    
+                    归档
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/categories/">
+                    
+                    分类
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/tags/">
+                    
+                    标签
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                生活
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/">
+                    
+                    书单
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/movies/">
+                    
+                    影单
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                工具
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/file/index">
+                    
+                    文件预览
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://file.ocrud.com/">
+                    
+                    个人网盘
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://life.ocrud.com/">
+                    
+                    听听歌曲
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/dog/dog.html">
+                    
+                    舔狗日记
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.processon.com/">
+                    
+                    在线绘图
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://app.diagrams.net/">
+                    
+                    在线绘图2
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://ocrud.com/nav/#/sim">
+                <i class="iconfont icon-link-fill"></i>
+                导航
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://cdn.ocrud.com/blog/bg15.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Redis应用-抢购优惠券</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-10 18:00" pubdate>
+          2022年4月10日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          25k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          205 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis应用-抢购优惠券</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="抢购优惠券"><a href="#抢购优惠券" class="headerlink" title="抢购优惠券"></a>抢购优惠券</h1><h2 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h2><ul>
+<li>定时开始抢购活动，禁止超卖</li>
+<li>用户抢购限制，一个用户只能购买一单</li>
+</ul>
+<h2 id="表结构设计"><a href="#表结构设计" class="headerlink" title="表结构设计"></a>表结构设计</h2><h4 id="代金券表"><a href="#代金券表" class="headerlink" title="代金券表"></a>代金券表</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> IF <span class="hljs-keyword">EXISTS</span> `t_vouchers`;
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `t_vouchers` (
+                              `id`  <span class="hljs-type">int</span>(<span class="hljs-number">10</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> AUTO_INCREMENT ,
+                              `title`  <span class="hljs-type">varchar</span>(<span class="hljs-number">255</span>) <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8 <span class="hljs-keyword">COLLATE</span> utf8_general_ci <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;代金券标题&#x27;</span> ,
+                              `thumbnail`  <span class="hljs-type">varchar</span>(<span class="hljs-number">255</span>) <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8 <span class="hljs-keyword">COLLATE</span> utf8_general_ci <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;缩略图&#x27;</span> ,
+                              `amount`  <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;抵扣金额&#x27;</span> ,
+                              `price`  <span class="hljs-type">decimal</span>(<span class="hljs-number">10</span>,<span class="hljs-number">2</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;售价&#x27;</span> ,
+                              `status`  <span class="hljs-type">int</span>(<span class="hljs-number">10</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;-1=过期 0=下架 1=上架&#x27;</span> ,
+                              `start_use_time`  datetime <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;开始使用时间&#x27;</span> ,
+                              `expire_time`  datetime <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;过期时间&#x27;</span> ,
+                              `stock`  <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-number">0</span> COMMENT <span class="hljs-string">&#x27;库存&#x27;</span> ,
+                              `stock_left`  <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-number">0</span> COMMENT <span class="hljs-string">&#x27;剩余数量&#x27;</span> ,
+                              `description`  <span class="hljs-type">varchar</span>(<span class="hljs-number">255</span>) <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8 <span class="hljs-keyword">COLLATE</span> utf8_general_ci <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;描述信息&#x27;</span> ,
+                              `clause`  <span class="hljs-type">varchar</span>(<span class="hljs-number">255</span>) <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8 <span class="hljs-keyword">COLLATE</span> utf8_general_ci <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;使用条款&#x27;</span> ,
+                              `create_date`  datetime <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> ,
+                              `update_date`  datetime <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> ,
+                              `remarks`  datetime <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> ,
+                              `is_valid` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">&#x27;0&#x27;</span>,
+                              <span class="hljs-keyword">PRIMARY</span> KEY (`id`)
+) ENGINE<span class="hljs-operator">=</span>InnoDB <span class="hljs-keyword">DEFAULT</span> <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span><span class="hljs-operator">=</span>utf8 <span class="hljs-keyword">COLLATE</span><span class="hljs-operator">=</span>utf8_general_ci AUTO_INCREMENT<span class="hljs-operator">=</span><span class="hljs-number">1</span> ROW_FORMAT<span class="hljs-operator">=</span>COMPACT;</code></pre></div>
+
+<h4 id="抢购活动表"><a href="#抢购活动表" class="headerlink" title="抢购活动表"></a>抢购活动表</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> IF <span class="hljs-keyword">EXISTS</span> `t_seckill_vouchers`;
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `t_seckill_vouchers` (
+                                      `id` <span class="hljs-type">int</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> AUTO_INCREMENT,
+                                      `fk_voucher_id` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,
+                                      `name` <span class="hljs-type">varchar</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">COLLATE</span> utf8mb4_general_ci <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,
+                                      `amount` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;库存&#x27;</span>,
+                                      `start_time` datetime <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,
+                                      `end_time` datetime <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,
+                                      `create_date` datetime <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,
+                                      `update_date` datetime <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,
+                                      `is_valid` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">&#x27;0&#x27;</span>,
+                                      <span class="hljs-keyword">PRIMARY</span> KEY (`id`)
+) ENGINE<span class="hljs-operator">=</span>InnoDB AUTO_INCREMENT<span class="hljs-operator">=</span><span class="hljs-number">3</span> <span class="hljs-keyword">DEFAULT</span> CHARSET<span class="hljs-operator">=</span>utf8mb4 <span class="hljs-keyword">COLLATE</span><span class="hljs-operator">=</span>utf8mb4_general_ci ROW_FORMAT<span class="hljs-operator">=</span>COMPACT;</code></pre></div>
+
+<h4 id="订单表"><a href="#订单表" class="headerlink" title="订单表"></a>订单表</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> IF <span class="hljs-keyword">EXISTS</span> `t_orders`;
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `t_orders` (
+                            `id` <span class="hljs-type">int</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> AUTO_INCREMENT,
+                            `order_no` <span class="hljs-type">varchar</span>(<span class="hljs-number">255</span>) <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8mb4 <span class="hljs-keyword">COLLATE</span> utf8mb4_general_ci <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;订单号&#x27;</span>,
+                            `fk_voucher_id` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;优惠券id&#x27;</span>,
+                            `fk_user_id` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;用户id&#x27;</span>,
+                            `fk_seckill_id` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;如果是抢购订单时，抢购订单的id&#x27;</span>,
+                            `status` tinyint(<span class="hljs-number">1</span>) <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;订单状态：-1=已取消 0=未支付 1=已支付 2=已消费 3=已过期&#x27;</span>,
+                            `order_type` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;订单类型：0=正常订单 1=抢购订单&#x27;</span>,
+                            `create_date` datetime <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,
+                            `update_date` datetime <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,
+                            `is_valid` <span class="hljs-type">int</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">&#x27;0&#x27;</span>,
+                            <span class="hljs-keyword">PRIMARY</span> KEY (`id`)
+) ENGINE<span class="hljs-operator">=</span>InnoDB <span class="hljs-keyword">DEFAULT</span> CHARSET<span class="hljs-operator">=</span>utf8mb4 <span class="hljs-keyword">COLLATE</span><span class="hljs-operator">=</span>utf8mb4_general_ci ROW_FORMAT<span class="hljs-operator">=</span>COMPACT;
+</code></pre></div>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>秒杀场景有以下几个特点：大量用户同时进行抢购操作，系统流量激增，服务器瞬时压力很大；请求数量远大于商品库存量，只有少数客户可以成功抢购；业务流程不复杂，核心功能是下订单。秒杀场景的应对，一般要从以下几个方面进行处理，如下：</p>
+<ol>
+<li>限流：从客户端层面考虑，限制单个客户抢购频率；服务端层面，加强校验，识别请求是否来源于真实的客户端，并限制请求频率，防止恶意刷单；应用层面，可以使用漏桶算法或令牌桶算法实现应用级限流。</li>
+<li>缓存：热点数据都从缓存获得，尽可能减小数据库的访问压力；</li>
+<li>异步：客户抢购成功后立即返回响应，之后通过消息队列，异步处理后续步骤，如发短信、更新数据库等，从而缓解服务器峰值压力。</li>
+<li>分流：单台服务器肯定无法应对抢购期间大量请求造成的压力，需要集群部署服务器，通过负载均衡共同处理客户端请求，分散压力。</li>
+</ol>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><p>Springboot、MybatisPlus、Redisson、lua</p>
+<h3 id="锁的产生"><a href="#锁的产生" class="headerlink" title="锁的产生"></a>锁的产生</h3><p>聊锁经常会说起线程安全问题，那什么又叫线程安全？线程安全就是线程最终运行的结果跟预想一样就是安全的，否则就是不安全的，解决线程安全有什么方式呢？</p>
+<ul>
+<li>不跨线程共享变量，线程共享的变量改为方法局部级变量</li>
+<li>使状态变量为不可变的，使用final修饰（将变量变为常量）</li>
+<li>在任何访问状态变量的时候使用同步，使用synchronized修饰方法，或使用同步代码块。</li>
+<li>每个共享的可变变量都需要由唯一一个确定的锁保护。使用Lock锁。</li>
+</ul>
+<p><strong>锁是一种保护机制，在多线程的情况下，保证数据操作的一致性。</strong></p>
+<p>Java中，我们通常使用的synchronized或者Lock都是线程锁，对同一个JVM进程内的多个线程有效。因为锁的本质 是内存中存放一个标记，记录获取锁的线程是谁，这个标记对每个线程都可见。比如我们启动的多个秒杀服务，就是多个JVM，内存中的锁显然是不共享的，每个JVM进程都有自己的锁，自然无法保证线程的互斥了，这个时候我们就需要使用到分布式锁了。</p>
+<h3 id="分布式锁实现"><a href="#分布式锁实现" class="headerlink" title="分布式锁实现"></a>分布式锁实现</h3><p>方式有三种：基于数据库；基于Zookeeper调度中心；<strong>基于Redis</strong></p>
+<h3 id="分布式锁条件"><a href="#分布式锁条件" class="headerlink" title="分布式锁条件"></a>分布式锁条件</h3><p><strong>实现分布式锁要满足3点：多进程可见，互斥，可重入。</strong></p>
+<h4 id="多进程可见"><a href="#多进程可见" class="headerlink" title="多进程可见"></a>多进程可见</h4><p>Redis本身就是基于JVM之外的，因此满足多进程可见的要求。</p>
+<h4 id="互斥"><a href="#互斥" class="headerlink" title="互斥"></a>互斥</h4><p>同一时间只能有一个进程获取锁标记，我们可以通过redis的setnx实现，只有第一次执行的才会成功并返回1，其它情况返回0。<code>setnx key value</code>将key设置值为value，如果key不存在，这种情况下等同SET命令。 当key存在时，什么也不做。SETNX是”SET if Not eXists”的简写。</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">第一次设置lock，成功返回1</span>
+127.0.0.1:0&gt;setnx lock 123
+&quot;1&quot;
+<span class="hljs-meta prompt_"># </span><span class="language-bash">如果存在，再次设置会返回0</span>
+127.0.0.1:0&gt;setnx lock 123
+&quot;0&quot;
+<span class="hljs-meta prompt_"># </span><span class="language-bash">获取lock</span>
+127.0.0.1:0&gt;get lock
+&quot;123&quot;</code></pre></div>
+
+<h5 id="解决死锁"><a href="#解决死锁" class="headerlink" title="解决死锁"></a>解决死锁</h5><p>但是使用setnx命令设置锁会出现死锁情况，比如当我get lock以后出现了异常以后并没有将锁删除，而且这把锁也没有过期时间，因此其他请求就再也获取不到这把锁了，这就是死锁。于是，后来Redis对<code>set</code>指令进行了改进，可以添加过期时间。当然有人会使用<code>expire</code>指令将key进行过期，但这样就不能保证<code>setnx</code>和<code>expire</code>的原子操作了。</p>
+<div class="code-wrapper"><pre><code class="hljs shell">SET KEY VALUE EX [seconds] PX [milliseconds] NX XX
+<span class="hljs-meta prompt_"></span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">EX seconds – 设置键key的过期时间，单位时秒</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">PX milliseconds – 设置键key的过期时间，单位时毫秒</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">NX – 只有键key不存在的时候才会设置key的值</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">XX – 只有键key存在的时候才会设置key的值</span></code></pre></div>
+
+<p><strong>因此 set lock 123 EX 60 NX == setnx lock 123 + expire lock 60，而且set是原子操作，因此如果使用最简单的Redis分布式锁的话就可以使用set指令</strong></p>
+<p>代码如下：</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisLock</span> &#123;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">LOCK_SUCCESS</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;OK&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> <span class="hljs-variable">UNLOCK_SUCCESS</span> <span class="hljs-operator">=</span> <span class="hljs-number">1L</span>;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 尝试获取分布式锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> jedis Redis客户端</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> lockKey 锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> value 锁的值</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> expireTime 超期时间</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span> 是否获取成功</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">tryLock</span><span class="hljs-params">(Jedis jedis, String lockKey,</span>
+<span class="hljs-params">                                  String value, <span class="hljs-type">int</span> expireTime)</span> &#123;
+        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) &#123;
+            <span class="hljs-comment">// set key value ex seconds nx(只有键不存在的时候才会设置key)</span>
+            <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> jedis.set(lockKey, value,
+                    SetParams.setParams().ex(expireTime).nx());
+            <span class="hljs-keyword">if</span> (LOCK_SUCCESS.equals(result)) &#123;
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+            &#125;
+        &#125;
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 释放分布式锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> jedis Redis客户端</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> lockKey 锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span> 是否释放成功</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">(Jedis jedis, String lockKey)</span> &#123;
+        <span class="hljs-type">Long</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> jedis.del(lockKey);
+        <span class="hljs-keyword">if</span> (UNLOCK_SUCCESS == result) &#123;
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        &#125;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    &#125;
+&#125;</code></pre></div>
+
+
+
+<p>测试代码：</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisLockTest</span> &#123;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> <span class="hljs-variable">lockKey</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;lock&quot;</span>;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">call</span><span class="hljs-params">(Jedis jedis)</span> &#123;
+
+        <span class="hljs-comment">// 加锁</span>
+        <span class="hljs-type">boolean</span> <span class="hljs-variable">locked</span> <span class="hljs-operator">=</span> RedisLock.tryLock(jedis, lockKey,
+                UUID.randomUUID().toString(), <span class="hljs-number">60</span>);
+        <span class="hljs-keyword">try</span> &#123;
+            <span class="hljs-keyword">if</span> (locked) &#123;
+                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span><span class="hljs-number">0</span>; i &lt; <span class="hljs-number">500</span>; i++) &#123;
+                    count ++;
+                &#125;
+            &#125;
+        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;
+            e.printStackTrace();
+        &#125; <span class="hljs-keyword">finally</span> &#123;
+            RedisLock.unlock(jedis, lockKey);
+        &#125;
+    &#125;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;
+        <span class="hljs-type">RedisLockTest</span> <span class="hljs-variable">redisLockTest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RedisLockTest</span>();
+        <span class="hljs-type">JedisPoolConfig</span> <span class="hljs-variable">jedisPoolConfig</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JedisPoolConfig</span>();
+        jedisPoolConfig.setMinIdle(<span class="hljs-number">1</span>);
+        jedisPoolConfig.setMaxTotal(<span class="hljs-number">5</span>);
+        <span class="hljs-type">JedisPool</span> <span class="hljs-variable">jedisPool</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JedisPool</span>(jedisPoolConfig, <span class="hljs-string">&quot;127.0.0.1&quot;</span>,
+                <span class="hljs-number">6379</span>, <span class="hljs-number">1000</span>);
+
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; redisLockTest.call(jedisPool.getResource()));
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">t2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; redisLockTest.call(jedisPool.getResource()));
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(redisLockTest.count);
+    &#125;
+
+&#125;</code></pre></div>
+
+<h5 id="释放锁时BUG"><a href="#释放锁时BUG" class="headerlink" title="释放锁时BUG"></a>释放锁时BUG</h5><ol>
+<li>3个进程：A和B和C，在执行任务，并争抢锁，此时A获取了锁，并设置自动过期时间为60s</li>
+<li>A开始执行业务，因为某种原因，业务阻塞，耗时超过了60秒，此时锁自动释放了</li>
+<li>B恰好此时开始尝试获取锁，因为锁已经自动释放，成功获取锁</li>
+<li>A此时业务执行完毕，执行释放锁逻辑（删除key），于是B的锁被释放了，而B其实还在执行业务</li>
+<li>此时进程C尝试获取锁，也成功了，因为A把B的锁删除了。</li>
+</ol>
+<p><strong>问题出现了：</strong>B和C同时获取了锁，违反了互斥性！如何解决这个问题呢？我们应该在删除锁之前，判断这个锁是否是自己设置的锁，如果不是（例如自己 的锁已经超时释放），那么就不要删除了。所以我们可以在set 锁时，存入当前线程的唯一标识！删除锁前，判断下里面的值是不是与自己标识释放一 致，如果不一致，说明不是自己的锁，就不要删除了。</p>
+<p><strong>解决方法：</strong>解锁的时候必须是自己的锁才能解除，否则不能解除</p>
+<p>代码调整如下：</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisLock02</span> &#123;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">LOCK_SUCCESS</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;OK&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> <span class="hljs-variable">UNLOCK_SUCCESS</span> <span class="hljs-operator">=</span> <span class="hljs-number">1L</span>;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 尝试获取分布式锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> jedis Redis客户端</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> lockKey 锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> requestId 锁的值</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> expireTime 超期时间</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span> 是否获取成功</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">tryLock</span><span class="hljs-params">(Jedis jedis, String lockKey,</span>
+<span class="hljs-params">                                  String requestId, <span class="hljs-type">int</span> expireTime)</span> &#123;
+
+        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) &#123;
+            <span class="hljs-comment">// set key value ex seconds nx(只有键不存在的时候才会设置key)</span>
+            <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> jedis.set(lockKey, requestId,
+                    SetParams.setParams().ex(expireTime).nx());
+            <span class="hljs-keyword">if</span> (LOCK_SUCCESS.equals(result)) &#123;
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+            &#125;
+        &#125;
+
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 释放分布式锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> jedis Redis客户端</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> lockKey 锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span> 是否释放成功</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">(Jedis jedis,  String lockKey, String requestId)</span> &#123;
+        <span class="hljs-keyword">if</span> (!jedis.get(lockKey).equals(requestId)) &#123;
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        &#125;
+        <span class="hljs-type">Long</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> jedis.del(lockKey);
+        <span class="hljs-type">return</span> <span class="hljs-variable">UNLOCK_SUCCESS</span> <span class="hljs-operator">=</span>= result ? <span class="hljs-literal">true</span>: <span class="hljs-literal">false</span>;
+    &#125;
+&#125;</code></pre></div>
+
+<p>测试：</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisLockTest2</span> &#123;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> <span class="hljs-variable">lockKey</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;lock&quot;</span>;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">call</span><span class="hljs-params">(Jedis jedis)</span> &#123;
+
+        <span class="hljs-comment">// 加锁</span>
+        <span class="hljs-type">String</span> <span class="hljs-variable">requestId</span> <span class="hljs-operator">=</span> UUID.randomUUID().toString();
+        <span class="hljs-type">boolean</span> <span class="hljs-variable">locked</span> <span class="hljs-operator">=</span> RedisLock02.tryLock(jedis, lockKey,
+                requestId, <span class="hljs-number">60</span>);
+        <span class="hljs-keyword">try</span> &#123;
+            <span class="hljs-keyword">if</span> (locked) &#123;
+                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span><span class="hljs-number">0</span>; i &lt; <span class="hljs-number">500</span>; i++) &#123;
+                    count ++;
+                &#125;
+            &#125;
+        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;
+            e.printStackTrace();
+        &#125; <span class="hljs-keyword">finally</span> &#123;
+            RedisLock02.unlock(jedis, lockKey, requestId);
+        &#125;
+    &#125;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;
+        <span class="hljs-type">RedisLockTest2</span> <span class="hljs-variable">redisLockTest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RedisLockTest2</span>();
+        <span class="hljs-type">JedisPoolConfig</span> <span class="hljs-variable">jedisPoolConfig</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JedisPoolConfig</span>();
+        jedisPoolConfig.setMinIdle(<span class="hljs-number">1</span>);
+        jedisPoolConfig.setMaxTotal(<span class="hljs-number">5</span>);
+        <span class="hljs-type">JedisPool</span> <span class="hljs-variable">jedisPool</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JedisPool</span>(jedisPoolConfig, <span class="hljs-string">&quot;127.0.0.1&quot;</span>,
+                <span class="hljs-number">6379</span>, <span class="hljs-number">1000</span>);
+
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; redisLockTest.call(jedisPool.getResource()));
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">t2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; redisLockTest.call(jedisPool.getResource()));
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(redisLockTest.count);
+    &#125;
+
+&#125;</code></pre></div>
+
+<p>按照上面方式实现分布式锁之后，就可以轻松解决大部分问题了。但是仍然有些场景是不满足的，例如一个方法获取到锁之后，可能在方法内调这个方法此时就获取不到锁了。这个时候我们就需要把锁改进成<strong>可重入锁</strong>了。</p>
+<h3 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h3><p>重入锁，指的是以线程为单位，当一个线程获取对象锁之后，这个线程可以再次获取本对象上的锁，而其他的线程是不可以的。可重入锁的意义在于防止死锁。</p>
+<p><strong>实现原理</strong>是通过为每个锁关联一个请求计数器和一个占有它的线程。当计数为0时，认为锁是未被占有的；线程请求一个未被占有的锁时，JVM将记录锁的占有者，并且将请求计数器置为1 。</p>
+<p>如果同一个线程再次请求这个锁，计数将递增；每次占用线程退出同步块，计数器值将递减。直到计数器为0,锁被释放。</p>
+<p>关于父类和子类的锁的重入：子类覆写了父类的synchonized方法，然后调用父类中的方法，此时如果没有重入的锁，那么这段代码将产生死锁。</p>
+<h4 id="代码演示："><a href="#代码演示：" class="headerlink" title="代码演示："></a>代码演示：</h4><h5 id="不可重入锁"><a href="#不可重入锁" class="headerlink" title="不可重入锁"></a>不可重入锁</h5><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Lock</span> &#123;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">isLocked</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lock</span><span class="hljs-params">()</span> &#123;
+        <span class="hljs-keyword">while</span> (isLocked) &#123;
+            <span class="hljs-keyword">try</span> &#123;
+                wait();
+            &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+        isLocked = <span class="hljs-literal">true</span>;
+    &#125;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">()</span> &#123;
+        isLocked = <span class="hljs-literal">false</span>;
+        notify();
+    &#125;
+&#125;</code></pre></div>
+
+<p>使用该锁：</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UnReentrantLockDemo</span> &#123;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">Lock</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Lock</span>();
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">call</span><span class="hljs-params">()</span> &#123;
+        lock.lock();
+        inc();
+        lock.unlock();
+    &#125;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">inc</span><span class="hljs-params">()</span> &#123;
+        lock.lock();
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span><span class="hljs-number">0</span>; i &lt; <span class="hljs-number">500</span>; i++) &#123;
+            count ++;
+        &#125;
+        lock.unlock();
+    &#125;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;
+        <span class="hljs-type">UnReentrantLockDemo</span> <span class="hljs-variable">unReentrantLockDemo</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UnReentrantLockDemo</span>();
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(()-&gt; unReentrantLockDemo.call());
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">t2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; unReentrantLockDemo.call());
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(unReentrantLockDemo.count);
+    &#125;
+&#125;</code></pre></div>
+
+<p>当前线程执行call()方法首先获取lock，接下来执行inc()方法就无法执行inc()中的逻辑，必须先释放锁。这个例子很好的说明了不可重入锁。</p>
+<h5 id="可重入锁-1"><a href="#可重入锁-1" class="headerlink" title="可重入锁"></a>可重入锁</h5><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 为每个锁关联一个请求计数器和一个占有它的线程。</span>
+<span class="hljs-comment"> * 当计数为0时，认为锁是未被占有的；</span>
+<span class="hljs-comment"> * 线程请求一个未被占有的锁时，JVM将记录锁的占有者，并且将请求计数器置为1 。</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ReentrantLock</span> &#123;
+    <span class="hljs-type">boolean</span> <span class="hljs-variable">isLocked</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-type">Thread</span> <span class="hljs-variable">lockBy</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>; <span class="hljs-comment">// 独占线程</span>
+    <span class="hljs-type">int</span> <span class="hljs-variable">lockedCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// 计数器</span>
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lock</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> InterruptedException &#123;
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> Thread.currentThread();
+        <span class="hljs-keyword">while</span> (isLocked &amp;&amp; lockBy != thread) &#123; <span class="hljs-comment">// 判断加锁，而且线程不是当前线程</span>
+            wait();
+        &#125;
+        isLocked = <span class="hljs-literal">true</span>;
+        lockedCount++; <span class="hljs-comment">// 计数器 +1</span>
+        lockBy = thread;
+
+    &#125;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">()</span> &#123;
+        <span class="hljs-keyword">if</span> (Thread.currentThread() == <span class="hljs-built_in">this</span>.lockBy) &#123; <span class="hljs-comment">// 判断是否是当前线程</span>
+            lockedCount--;
+            <span class="hljs-keyword">if</span> (lockedCount == <span class="hljs-number">0</span>) &#123;  <span class="hljs-comment">// 计数器为0时，释放锁</span>
+                isLocked = <span class="hljs-literal">false</span>;
+                notify();
+            &#125;
+        &#125;
+    &#125;
+&#125;</code></pre></div>
+
+<p>测试可重入锁</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ReentrantLockDemo</span> &#123;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">ReentrantLock</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReentrantLock</span>();
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">call</span><span class="hljs-params">()</span> &#123;
+        <span class="hljs-keyword">try</span> &#123;
+            lock.lock();
+        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125;
+        inc();
+        lock.unlock();
+    &#125;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">inc</span><span class="hljs-params">()</span> &#123;
+        <span class="hljs-keyword">try</span> &#123;
+            lock.lock();
+        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span><span class="hljs-number">0</span>; i &lt; <span class="hljs-number">500</span>; i++) &#123;
+            count ++;
+        &#125;
+        lock.unlock();
+    &#125;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;
+        <span class="hljs-type">ReentrantLockDemo</span> <span class="hljs-variable">demo</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReentrantLockDemo</span>();
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(()-&gt; demo.call());
+        <span class="hljs-type">Thread</span> <span class="hljs-variable">t2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; demo.call());
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(demo.count);
+    &#125;
+&#125;</code></pre></div>
+
+<p>所谓可重入，意味着线程可以进入它已经拥有的锁的同步代码块儿。</p>
+<p>我们设计两个线程调用call()方法，第一个线程调用call()方法获取锁，进入lock()方法，由于初始lockedBy是null，所以不会进入while而挂起当前线程，而是是增量lockedCount并记录lockBy为第一个线程。接着第一个线程进入inc()方法，由于同一进程，所以不会进入while而挂起，接着增量lockedCount，当第二个线程尝试lock，由于isLocked=true,所以他不会获取该锁，直到第一个线程调用两次unlock()将lockCount递减为0，才将标记为isLocked设置为false。</p>
+<h4 id="Redis可重入锁"><a href="#Redis可重入锁" class="headerlink" title="Redis可重入锁"></a>Redis可重入锁</h4><h5 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h5><div class="code-wrapper"><pre><code class="hljs java">假设锁的key为“ lock ”，hashKey是当前线程的id：“ threadId ”，锁自动释放时间假设为<span class="hljs-number">20</span>
+获取锁的步骤：
+<span class="hljs-number">1</span>、判断lock是否存在 EXISTS lock 
+<span class="hljs-number">2</span>、不存在，则自己获取锁，记录重入层数为<span class="hljs-number">1.</span>
+<span class="hljs-number">3</span>、存在，说明有人获取锁了，下面判断是不是自己的锁,即判断当前线程id作为hashKey是否存在：HEXISTS lock threadId 
+<span class="hljs-number">4</span>、不存在，说明锁已经有了，且不是自己获取的，锁获取失败.
+<span class="hljs-number">5</span>、存在，说明是自己获取的锁，重入次数+<span class="hljs-number">1</span>： HINCRBY lock threadId <span class="hljs-number">1</span> ，最后更新锁自动释放时间， EXPIRE lock <span class="hljs-number">20</span>
+        
+释放锁的步骤：
+<span class="hljs-number">1</span>、判断当前线程id作为hashKey是否存在： HEXISTS lock threadId 
+<span class="hljs-number">2</span>、不存在，说明锁已经失效，不用管了 
+<span class="hljs-number">3</span>、存在，说明锁还在，重入次数减<span class="hljs-number">1</span>： HINCRBY lock threadId -<span class="hljs-number">1</span> ，
+<span class="hljs-number">4</span>、获取新的重入次数，判断重入次数是否为<span class="hljs-number">0</span>，为<span class="hljs-number">0</span>说明锁全部释放，删除key： DEL lock</code></pre></div>
+
+<p>因此，存储在锁中的信息就必须包含：key、线程标识、重入次数。不能再使用简单的key-value结构， 这里推荐使用hash结构。而且要让所有指令都在同一个线程中操作，那么使用lua脚本</p>
+<h5 id="设计lock-lua脚本"><a href="#设计lock-lua脚本" class="headerlink" title="设计lock.lua脚本"></a>设计lock.lua脚本</h5><div class="code-wrapper"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> key = KEYS[<span class="hljs-number">1</span>]; <span class="hljs-comment">-- 第1个参数,锁的key</span>
+<span class="hljs-keyword">local</span> threadId = ARGV[<span class="hljs-number">1</span>]; <span class="hljs-comment">-- 第2个参数,线程唯一标识</span>
+<span class="hljs-keyword">local</span> releaseTime = ARGV[<span class="hljs-number">2</span>]; <span class="hljs-comment">-- 第3个参数,锁的自动释放时间</span>
+
+<span class="hljs-keyword">if</span>(redis.call(<span class="hljs-string">&#x27;exists&#x27;</span>, key) == <span class="hljs-number">0</span>) <span class="hljs-keyword">then</span> <span class="hljs-comment">-- 判断锁是否已存在</span>
+    redis.call(<span class="hljs-string">&#x27;hset&#x27;</span>, key, threadId, <span class="hljs-string">&#x27;1&#x27;</span>); <span class="hljs-comment">-- 不存在, 则获取锁</span>
+    redis.call(<span class="hljs-string">&#x27;expire&#x27;</span>, key, releaseTime); <span class="hljs-comment">-- 设置有效期</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; <span class="hljs-comment">-- 返回结果</span>
+<span class="hljs-keyword">end</span>;
+
+<span class="hljs-keyword">if</span>(redis.call(<span class="hljs-string">&#x27;hexists&#x27;</span>, key, threadId) == <span class="hljs-number">1</span>) <span class="hljs-keyword">then</span> <span class="hljs-comment">-- 锁已经存在，判断threadId是否是自己    </span>
+    redis.call(<span class="hljs-string">&#x27;hincrby&#x27;</span>, key, threadId, <span class="hljs-string">&#x27;1&#x27;</span>); <span class="hljs-comment">-- 如果是自己，则重入次数+1</span>
+    redis.call(<span class="hljs-string">&#x27;expire&#x27;</span>, key, releaseTime); <span class="hljs-comment">-- 设置有效期</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; <span class="hljs-comment">-- 返回结果</span>
+<span class="hljs-keyword">end</span>;
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">-- 代码走到这里,说明获取锁的不是自己，获取锁失败</span></code></pre></div>
+
+<h5 id="设计unlock-lua脚本"><a href="#设计unlock-lua脚本" class="headerlink" title="设计unlock.lua脚本"></a>设计unlock.lua脚本</h5><div class="code-wrapper"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> key = KEYS[<span class="hljs-number">1</span>]; <span class="hljs-comment">-- 第1个参数,锁的key</span>
+<span class="hljs-keyword">local</span> threadId = ARGV[<span class="hljs-number">1</span>]; <span class="hljs-comment">-- 第2个参数,线程唯一标识</span>
+
+<span class="hljs-keyword">if</span> (redis.call(<span class="hljs-string">&#x27;HEXISTS&#x27;</span>, key, threadId) == <span class="hljs-number">0</span>) <span class="hljs-keyword">then</span> <span class="hljs-comment">-- 判断当前锁是否还是被自己持有</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>; <span class="hljs-comment">-- 如果已经不是自己，则直接返回</span>
+<span class="hljs-keyword">end</span>;
+<span class="hljs-keyword">local</span> count = redis.call(<span class="hljs-string">&#x27;HINCRBY&#x27;</span>, key, threadId, <span class="hljs-number">-1</span>); <span class="hljs-comment">-- 是自己的锁，则重入次数-1</span>
+
+<span class="hljs-keyword">if</span> (count == <span class="hljs-number">0</span>) <span class="hljs-keyword">then</span> <span class="hljs-comment">-- 判断是否重入次数是否已经为0</span>
+    redis.call(<span class="hljs-string">&#x27;DEL&#x27;</span>, key); <span class="hljs-comment">-- 等于0说明可以释放锁，直接删除</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>;    
+<span class="hljs-keyword">end</span>;</code></pre></div>
+
+<h5 id="编写RedisLock类"><a href="#编写RedisLock类" class="headerlink" title="编写RedisLock类"></a>编写RedisLock类</h5><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisLock</span> &#123;
+
+    <span class="hljs-keyword">private</span> RedisTemplate redisTemplate;
+    <span class="hljs-keyword">private</span> DefaultRedisScript&lt;Long&gt; lockScript;
+    <span class="hljs-keyword">private</span> DefaultRedisScript&lt;Object&gt; unlockScript;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">RedisLock</span><span class="hljs-params">(RedisTemplate redisTemplate)</span> &#123;
+        <span class="hljs-built_in">this</span>.redisTemplate = redisTemplate;
+        <span class="hljs-comment">// 加载释放锁的脚本</span>
+        <span class="hljs-built_in">this</span>.lockScript = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DefaultRedisScript</span>&lt;&gt;();
+        <span class="hljs-built_in">this</span>.lockScript.setScriptSource(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ResourceScriptSource</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ClassPathResource</span>(<span class="hljs-string">&quot;lock.lua&quot;</span>)));
+        <span class="hljs-built_in">this</span>.lockScript.setResultType(Long.class);
+        <span class="hljs-comment">// 加载释放锁的脚本</span>
+        <span class="hljs-built_in">this</span>.unlockScript = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DefaultRedisScript</span>&lt;&gt;();
+        <span class="hljs-built_in">this</span>.unlockScript.setScriptSource(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ResourceScriptSource</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ClassPathResource</span>(<span class="hljs-string">&quot;unlock.lua&quot;</span>)));
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 获取锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> lockName 锁名称</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> releaseTime 超时时间(单位:秒)</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span> key 解锁标识</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">tryLock</span><span class="hljs-params">(String lockName, <span class="hljs-type">long</span> releaseTime)</span> &#123;
+        <span class="hljs-comment">// 存入的线程信息的前缀，防止与其它JVM中线程信息冲突</span>
+        <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> UUID.randomUUID().toString();
+
+        <span class="hljs-comment">// 执行脚本</span>
+        <span class="hljs-type">Long</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> (Long)redisTemplate.execute(
+                lockScript,
+                Collections.singletonList(lockName),
+                key + Thread.currentThread().getId(), releaseTime);
+
+        <span class="hljs-comment">// 判断结果</span>
+        <span class="hljs-keyword">if</span>(result != <span class="hljs-literal">null</span> &amp;&amp; result.intValue() == <span class="hljs-number">1</span>) &#123;
+            <span class="hljs-keyword">return</span> key;
+        &#125;<span class="hljs-keyword">else</span> &#123;
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        &#125;
+    &#125;
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 释放锁</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> lockName 锁名称</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> key 解锁标识</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">(String lockName, String key)</span> &#123;
+        <span class="hljs-comment">// 执行脚本</span>
+        redisTemplate.execute(
+                unlockScript,
+                Collections.singletonList(lockName),
+                key + Thread.currentThread().getId(), <span class="hljs-literal">null</span>);
+    &#125;
+&#125;</code></pre></div>
+
+<h5 id="初始化Bean"><a href="#初始化Bean" class="headerlink" title="初始化Bean"></a>初始化Bean</h5><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisLockConfiguration</span> &#123;
+
+    <span class="hljs-meta">@Resource</span>
+    <span class="hljs-keyword">private</span> RedisTemplate redisTemplate;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-keyword">public</span> RedisLock <span class="hljs-title function_">redisLock</span><span class="hljs-params">()</span> &#123;
+        <span class="hljs-type">RedisLock</span> <span class="hljs-variable">redisLock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RedisLock</span>(redisTemplate);
+        <span class="hljs-keyword">return</span> redisLock;
+    &#125;
+&#125;</code></pre></div>
+
+<h2 id="具体实现代码"><a href="#具体实现代码" class="headerlink" title="具体实现代码"></a>具体实现代码</h2><h3 id="依赖文件"><a href="#依赖文件" class="headerlink" title="依赖文件"></a>依赖文件</h3><div class="code-wrapper"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- spring-boot --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;spring.boot.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- redis --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.commons<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>commons-pool2<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- mysql --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>mysql<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mysql-connector-java<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;mysql.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- lombok --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.projectlombok<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>lombok<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;lombok.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- freemarker --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.freemarker<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>freemarker<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;freemarker.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jackson-annotations<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- rabbitMq --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-amqp<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>fastjson<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;fastjson.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- mybatisplus --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.baomidou<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;mybatis.plus.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.baomidou<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mybatis-plus-generator<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;mybatisplus.generator.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-dependencies<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;spring.boot.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">type</span>&gt;</span>pom<span class="hljs-tag">&lt;/<span class="hljs-name">type</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>import<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- hutool工具类 --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>cn.hutool<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>hutool-all<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;hutool.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- guava工具类 --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.google.guava<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>guava<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;guava.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+       <span class="hljs-comment">&lt;!-- https://mvnrepository.com/artifact/org.redisson/redisson --&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.redisson<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>redisson<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.17.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+   <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span></code></pre></div>
+
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><div class="code-wrapper"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span>
+  <span class="hljs-attr">datasource:</span>
+    <span class="hljs-attr">url:</span> <span class="hljs-string">jdbc:mysql://127.0.0.1:3306/redis?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;serverTimezone=GMT%2B8</span>
+    <span class="hljs-attr">username:</span> <span class="hljs-string">root</span>
+    <span class="hljs-attr">password:</span> <span class="hljs-string">root</span>
+    <span class="hljs-attr">driver-class-name:</span> <span class="hljs-string">com.mysql.cj.jdbc.Driver</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">com.zaxxer.hikari.HikariDataSource</span>
+    <span class="hljs-attr">initialization-mode:</span> <span class="hljs-string">always</span>
+    <span class="hljs-attr">continue-on-error:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">schema:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;classpath:db/schema.sql&quot;</span>
+    <span class="hljs-attr">data:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;classpath:db/data.sql&quot;</span>
+    <span class="hljs-attr">hikari:</span>
+      <span class="hljs-attr">minimum-idle:</span> <span class="hljs-number">5</span>
+      <span class="hljs-attr">connection-test-query:</span> <span class="hljs-string">SELECT</span> <span class="hljs-number">1</span> <span class="hljs-string">FROM</span> <span class="hljs-string">DUAL</span>
+      <span class="hljs-attr">maximum-pool-size:</span> <span class="hljs-number">20</span>
+      <span class="hljs-attr">auto-commit:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">idle-timeout:</span> <span class="hljs-number">30000</span>
+      <span class="hljs-attr">pool-name:</span> <span class="hljs-string">SpringBootDemoHikariCP</span>
+      <span class="hljs-attr">max-lifetime:</span> <span class="hljs-number">60000</span>
+      <span class="hljs-attr">connection-timeout:</span> <span class="hljs-number">30000</span>
+  <span class="hljs-attr">rabbitmq:</span>
+    <span class="hljs-attr">listener:</span>
+      <span class="hljs-attr">simple:</span>
+        <span class="hljs-attr">acknowledge-mode:</span> <span class="hljs-string">auto</span>  <span class="hljs-comment"># 消息确认方式，其有三种配置方式，分别是none、manual(手动ack) 和auto(自动ack) 默认auto</span>
+        <span class="hljs-attr">retry:</span>
+          <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>  <span class="hljs-comment">#监听重试是否可用</span>
+          <span class="hljs-attr">max-attempts:</span> <span class="hljs-number">3</span>   <span class="hljs-comment">#最大重试次数 默认为3</span>
+          <span class="hljs-attr">initial-interval:</span> <span class="hljs-number">2000</span>  <span class="hljs-comment"># 传递消息的时间间隔 默认1s</span>
+    <span class="hljs-attr">username:</span> <span class="hljs-string">root</span>
+    <span class="hljs-attr">password:</span> <span class="hljs-string">root</span>
+    <span class="hljs-attr">host:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>
+    <span class="hljs-attr">port:</span> <span class="hljs-number">5672</span>
+  <span class="hljs-attr">thymeleaf:</span>
+    <span class="hljs-attr">mode:</span> <span class="hljs-string">HTML</span>
+    <span class="hljs-attr">encoding:</span> <span class="hljs-string">UTF-8</span>
+    <span class="hljs-attr">servlet:</span>
+      <span class="hljs-attr">content-type:</span> <span class="hljs-string">text/html</span>
+    <span class="hljs-attr">cache:</span> <span class="hljs-literal">false</span>
+  <span class="hljs-attr">redis:</span>
+    <span class="hljs-attr">host:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>
+    <span class="hljs-comment"># 连接超时时间（记得添加单位，Duration）</span>
+    <span class="hljs-attr">timeout:</span> <span class="hljs-string">1000ms</span>
+    <span class="hljs-comment"># Redis默认情况下有16个分片</span>
+    <span class="hljs-attr">database:</span> <span class="hljs-number">0</span>
+    <span class="hljs-attr">lettuce:</span>
+      <span class="hljs-attr">pool:</span>
+        <span class="hljs-comment"># 连接池最大连接数（使用负值表示没有限制） 默认 8</span>
+        <span class="hljs-attr">max-active:</span> <span class="hljs-number">8</span>
+        <span class="hljs-comment"># 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1</span>
+        <span class="hljs-attr">max-wait:</span> <span class="hljs-string">-1ms</span>
+        <span class="hljs-comment"># 连接池中的最大空闲连接 默认 8</span>
+        <span class="hljs-attr">max-idle:</span> <span class="hljs-number">8</span>
+        <span class="hljs-comment"># 连接池中的最小空闲连接 默认 0</span>
+        <span class="hljs-attr">min-idle:</span> <span class="hljs-number">0</span>
+  <span class="hljs-attr">cache:</span>
+    <span class="hljs-comment"># 一般来说是不用配置的，Spring Cache 会根据依赖的包自行装配</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">redis</span>
+<span class="hljs-attr">logging:</span>
+  <span class="hljs-attr">level:</span>
+    <span class="hljs-attr">com.ocrud:</span> <span class="hljs-string">debug</span>
+<span class="hljs-attr">mybatis-plus:</span>
+  <span class="hljs-attr">mapper-locations:</span> <span class="hljs-string">classpath:/mapper/*.xml,classpath:/com/ocrud/mapper/xml/*.xml</span>
+  <span class="hljs-comment">#实体扫描，多个package用逗号或者分号分隔</span>
+  <span class="hljs-attr">typeAliasesPackage:</span> <span class="hljs-string">com.ocrud.entity</span>
+  <span class="hljs-attr">global-config:</span>
+    <span class="hljs-comment"># 数据库相关配置</span>
+    <span class="hljs-attr">db-config:</span>
+      <span class="hljs-comment">#主键类型  AUTO:&quot;数据库ID自增&quot;, INPUT:&quot;用户输入ID&quot;,ID_WORKER:&quot;全局唯一ID (数字类型唯一ID)&quot;, UUID:&quot;全局唯一ID UUID&quot;;</span>
+      <span class="hljs-attr">id-type:</span> <span class="hljs-string">auto</span>
+      <span class="hljs-comment">#字段策略 IGNORED:&quot;忽略判断&quot;,NOT_NULL:&quot;非 NULL 判断&quot;),NOT_EMPTY:&quot;非空判断&quot;</span>
+      <span class="hljs-attr">field-strategy:</span> <span class="hljs-string">not_empty</span>
+      <span class="hljs-comment">#驼峰下划线转换</span>
+      <span class="hljs-attr">table-underline:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-comment">#是否开启大写命名，默认不开启</span>
+      <span class="hljs-comment">#capital-mode: true</span>
+      <span class="hljs-comment">#逻辑删除配置</span>
+      <span class="hljs-attr">logic-delete-value:</span> <span class="hljs-number">1</span>
+      <span class="hljs-attr">logic-not-delete-value:</span> <span class="hljs-number">0</span>
+      <span class="hljs-attr">db-type:</span> <span class="hljs-string">mysql</span>
+    <span class="hljs-comment">#刷新mapper 调试神器</span>
+    <span class="hljs-attr">refresh:</span> <span class="hljs-literal">true</span>
+  <span class="hljs-comment"># 原生配置</span>
+  <span class="hljs-attr">configuration:</span>
+    <span class="hljs-attr">map-underscore-to-camel-case:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">cache-enabled:</span> <span class="hljs-literal">false</span></code></pre></div>
+
+<h3 id="核心业务代码"><a href="#核心业务代码" class="headerlink" title="核心业务代码"></a>核心业务代码</h3><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-meta">@SneakyThrows</span>
+<span class="hljs-meta">@Override</span>
+<span class="hljs-meta">@Transactional(rollbackFor = &#123; SQLException.class &#125;)</span>
+<span class="hljs-keyword">public</span> Boolean <span class="hljs-title function_">doSeckill</span><span class="hljs-params">(Integer seckillVouchersId, Integer userId)</span> &#123;
+    <span class="hljs-comment">// 基本参数校验</span>
+    Assert.isFalse(seckillVouchersId == <span class="hljs-literal">null</span> || seckillVouchersId &lt; <span class="hljs-number">0</span>, <span class="hljs-string">&quot;请选择需要抢购的代金券&quot;</span>);
+    <span class="hljs-comment">// 判断此代金券是否加入抢购</span>
+    <span class="hljs-type">TSeckillVouchers</span> <span class="hljs-variable">seckillVouchers</span> <span class="hljs-operator">=</span> getById(seckillVouchersId);
+    Assert.isFalse(seckillVouchers == <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;该代金券并未有抢购活动&quot;</span>);
+    <span class="hljs-comment">// 判断是否有效</span>
+    Assert.isFalse(seckillVouchers.getIsValid() == <span class="hljs-number">1</span>, <span class="hljs-string">&quot;该活动已结束&quot;</span>);
+    <span class="hljs-comment">// 判断是否开始、结束</span>
+    <span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">now</span> <span class="hljs-operator">=</span> LocalDateTime.now();
+    Assert.isFalse(now.isBefore(seckillVouchers.getStartTime()), <span class="hljs-string">&quot;该抢购还未开始&quot;</span>);
+    Assert.isFalse(now.isAfter(seckillVouchers.getEndTime()), <span class="hljs-string">&quot;该抢购已结束&quot;</span>);
+    <span class="hljs-type">Integer</span> <span class="hljs-variable">voucherId</span> <span class="hljs-operator">=</span> seckillVouchers.getFkVoucherId();
+    <span class="hljs-type">String</span> <span class="hljs-variable">redisKey</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;seckillVouchersId:&quot;</span> + seckillVouchersId + <span class="hljs-string">&quot;:&quot;</span> + Constant.REDIS_VOUCHER_KEY + voucherId;
+    Map&lt;String, Object&gt; seckillVoucherMaps = redisTemplate.opsForHash().entries(redisKey);
+    <span class="hljs-type">TVouchers</span> <span class="hljs-variable">tVouchers</span> <span class="hljs-operator">=</span> BeanUtil.mapToBean(seckillVoucherMaps, TVouchers.class, <span class="hljs-literal">true</span>, <span class="hljs-literal">null</span>);
+    <span class="hljs-comment">// 获取登录用户信息 如果userId不为空则模拟单一用户重复下单</span>
+    <span class="hljs-keyword">if</span> (userId == <span class="hljs-literal">null</span>) &#123;
+        userId = Integer.valueOf(RandomUtil.randomNumbers(<span class="hljs-number">9</span>));
+    &#125;
+    <span class="hljs-comment">// 判断登录用户是否已抢到(一个用户针对这次活动只能买一次)</span>
+    <span class="hljs-type">TOrders</span> <span class="hljs-variable">order</span> <span class="hljs-operator">=</span> tOrdersService.findDinerOrder(userId,
+            seckillVouchers.getFkVoucherId());
+    Assert.isFalse(order != <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;该用户已抢到该代金券，无需再抢&quot;</span>);
+    <span class="hljs-type">String</span> <span class="hljs-variable">lockName</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;seckillVouchersId:&quot;</span> + seckillVouchersId + Constant.REDIS_VOUCHER_KEY + voucherId + <span class="hljs-string">&quot;:&quot;</span> + userId;
+    <span class="hljs-comment">// 加锁并设置失效时间</span>
+    <span class="hljs-type">long</span> <span class="hljs-variable">lockTime</span> <span class="hljs-operator">=</span> Duration.between(tVouchers.getExpireTime(), LocalDateTime.now()).getSeconds();
+    <span class="hljs-type">RLock</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> redisson.getLock(lockName);
+    <span class="hljs-keyword">try</span> &#123;
+        <span class="hljs-type">boolean</span> <span class="hljs-variable">lockFlag</span> <span class="hljs-operator">=</span> lock.tryLock(lockTime, TimeUnit.SECONDS);
+        <span class="hljs-comment">// 拿到锁</span>
+        <span class="hljs-keyword">if</span> (lockFlag) &#123;
+            <span class="hljs-comment">// 下单</span>
+            <span class="hljs-type">TOrders</span> <span class="hljs-variable">orders</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TOrders</span>();
+            orders.setFkUserId(userId);
+            orders.setFkSeckillId(seckillVouchers.getId());
+            orders.setFkVoucherId(voucherId);
+            <span class="hljs-type">String</span> <span class="hljs-variable">orderNo</span> <span class="hljs-operator">=</span> IdUtil.getSnowflake(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>).nextIdStr();
+            orders.setOrderNo(orderNo);
+            orders.setOrderType(<span class="hljs-number">1</span>);
+            orders.setStatus(<span class="hljs-number">0</span>);
+            <span class="hljs-type">boolean</span> <span class="hljs-variable">save</span> <span class="hljs-operator">=</span> tOrdersService.save(orders);
+            <span class="hljs-comment">// 扣库存</span>
+            List&lt;String&gt; keys = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
+            keys.add(redisKey);
+            keys.add(<span class="hljs-string">&quot;stockLeft&quot;</span>);
+            <span class="hljs-type">Long</span> <span class="hljs-variable">stockLeft</span> <span class="hljs-operator">=</span> (Long) redisTemplate.execute(redisScript, keys);
+            Assert.isFalse(stockLeft == <span class="hljs-literal">null</span> || stockLeft &lt; <span class="hljs-number">1</span>, <span class="hljs-string">&quot;该代金券已经卖完了&quot;</span>);
+            <span class="hljs-comment">// 异步更新</span>
+            rabbitTemplate.convertAndSend(Constant.RABBIT_EXCHANGE_NAME, Constant.RABBIT_KEY_NAME, voucherId + <span class="hljs-string">&quot;&quot;</span>);
+        &#125;
+    &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        lock.unlock();
+        <span class="hljs-keyword">throw</span> e;
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+&#125;</code></pre></div>
+
+<h3 id="lua脚本"><a href="#lua脚本" class="headerlink" title="lua脚本"></a>lua脚本</h3><div class="code-wrapper"><pre><code class="hljs lua"><span class="hljs-keyword">if</span> (redis.call(<span class="hljs-string">&#x27;hexists&#x27;</span>, KEYS[<span class="hljs-number">1</span>], KEYS[<span class="hljs-number">2</span>]) == <span class="hljs-number">1</span>) <span class="hljs-keyword">then</span>
+	<span class="hljs-keyword">local</span> stock = <span class="hljs-built_in">tonumber</span>(redis.call(<span class="hljs-string">&#x27;hget&#x27;</span>, KEYS[<span class="hljs-number">1</span>], KEYS[<span class="hljs-number">2</span>]));
+	<span class="hljs-keyword">if</span> (stock &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">then</span>
+	   redis.call(<span class="hljs-string">&#x27;hincrby&#x27;</span>, KEYS[<span class="hljs-number">1</span>], KEYS[<span class="hljs-number">2</span>], <span class="hljs-number">-1</span>);
+	   <span class="hljs-keyword">return</span> stock;
+	<span class="hljs-keyword">end</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+<span class="hljs-keyword">end</span>;</code></pre></div>
+
+<h3 id="redis配置文件"><a href="#redis配置文件" class="headerlink" title="redis配置文件"></a>redis配置文件</h3><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span>
+<span class="hljs-meta">@AutoConfigureAfter(RedisAutoConfiguration.class)</span>
+<span class="hljs-meta">@EnableCaching</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisConfig</span> &#123;
+
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * redisTemplate 序列化使用的jdkSerializeable, 存储二进制字节码, 所以自定义序列化类</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> redisConnectionFactory</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="hljs-title function_">redisTemplate</span><span class="hljs-params">(RedisConnectionFactory redisConnectionFactory)</span> &#123;
+        RedisTemplate&lt;String, Object&gt; template = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RedisTemplate</span>&lt;String, Object&gt;();
+        template.setConnectionFactory(redisConnectionFactory);
+        <span class="hljs-type">Jackson2JsonRedisSerializer</span> <span class="hljs-variable">jackson2JsonRedisSerializer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Jackson2JsonRedisSerializer</span>(Object.class);
+        <span class="hljs-type">ObjectMapper</span> <span class="hljs-variable">om</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectMapper</span>();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance ,
+                ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+        <span class="hljs-comment">//LocalDatetime序列化</span>
+        <span class="hljs-type">JavaTimeModule</span> <span class="hljs-variable">timeModule</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JavaTimeModule</span>();
+        timeModule.addDeserializer(LocalDate.class,
+                <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalDateDeserializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd&quot;</span>)));
+        timeModule.addDeserializer(LocalDateTime.class,
+                <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalDateTimeDeserializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>)));
+        timeModule.addSerializer(LocalDate.class,
+                <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalDateSerializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd&quot;</span>)));
+        timeModule.addSerializer(LocalDateTime.class,
+                <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalDateTimeSerializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>)));
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        om.registerModule(timeModule);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        <span class="hljs-type">StringRedisSerializer</span> <span class="hljs-variable">stringRedisSerializer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringRedisSerializer</span>();
+        <span class="hljs-comment">// key采用String的序列化方式</span>
+        template.setKeySerializer(stringRedisSerializer);
+        <span class="hljs-comment">// hash的key也采用String的序列化方式</span>
+        template.setHashKeySerializer(stringRedisSerializer);
+        <span class="hljs-comment">// value序列化方式采用jackson</span>
+        template.setValueSerializer(jackson2JsonRedisSerializer);
+        <span class="hljs-comment">// hash的value序列化方式采用jackson</span>
+        template.setHashValueSerializer(jackson2JsonRedisSerializer);
+        template.afterPropertiesSet();
+        <span class="hljs-keyword">return</span> template;
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-keyword">public</span> DefaultRedisScript&lt;Long&gt; <span class="hljs-title function_">stockScript</span><span class="hljs-params">()</span> &#123;
+        DefaultRedisScript&lt;Long&gt; redisScript = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DefaultRedisScript</span>&lt;&gt;();
+        <span class="hljs-comment">//放在和application.yml 同层目录下</span>
+        redisScript.setLocation(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ClassPathResource</span>(<span class="hljs-string">&quot;stock.lua&quot;</span>));
+        redisScript.setResultType(Long.class);
+        <span class="hljs-keyword">return</span> redisScript;
+    &#125;
+&#125;</code></pre></div>
+
+<h3 id="rabbitMq消费端"><a href="#rabbitMq消费端" class="headerlink" title="rabbitMq消费端"></a>rabbitMq消费端</h3><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-meta">@Component</span>
+<span class="hljs-meta">@Slf4j</span>
+<span class="hljs-meta">@RabbitListener(queues = Constant.RABBIT_QUEUE_NAME)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">KillReceiver</span> &#123;
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> TVouchersService tVouchersService;
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> TOrdersService tOrdersService;
+
+    <span class="hljs-meta">@SneakyThrows</span>
+    <span class="hljs-meta">@RabbitHandler</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">process</span><span class="hljs-params">(String msg)</span> &#123;
+        <span class="hljs-type">TVouchers</span> <span class="hljs-variable">tVouchers</span> <span class="hljs-operator">=</span> tVouchersService.getById(msg);
+        tVouchers.setStockLeft(tVouchers.getStock() - tOrdersService.count(<span class="hljs-keyword">new</span> <span class="hljs-title class_">LambdaQueryWrapper</span>&lt;TOrders&gt;().eq(TOrders::getFkVoucherId, msg)));
+        tVouchersService.updateById(tVouchers);
+    &#125;
+&#125;</code></pre></div>
+
+<h3 id="调用链"><a href="#调用链" class="headerlink" title="调用链"></a>调用链</h3><p>增加优惠券缓存到redis</p>
+<p class="note note-info">http://localhost:8080/addVouchersCache?voucherId=1&seckillVouchersId=1</p>
+
+<p>并发抢购</p>
+<p class="note note-info">http://localhost:8080/doSeckill?seckillVouchersId=1</p>
+
+<p>单一用户并发抢购</p>
+<p class="note note-info">http://localhost:8080/doSeckill?seckillVouchersId=1&userId=1</p>
+
+
+<h3 id="测试前数据"><a href="#测试前数据" class="headerlink" title="测试前数据"></a>测试前数据</h3><h4 id="redis存储键值对"><a href="#redis存储键值对" class="headerlink" title="redis存储键值对"></a>redis存储键值对</h4><p><img src="https://cdn.ocrud.com/img/202204111832448.png" srcset="/img/loading.gif" lazyload alt="redis存储键值对"></p>
+<h4 id="未插入前代金券表数据"><a href="#未插入前代金券表数据" class="headerlink" title="未插入前代金券表数据"></a>未插入前代金券表数据</h4><p><img src="https://cdn.ocrud.com/img/202204111833347.png" srcset="/img/loading.gif" lazyload alt="未插入前代金券表数据"></p>
+<h4 id="未插入前订单表数据"><a href="#未插入前订单表数据" class="headerlink" title="未插入前订单表数据"></a>未插入前订单表数据</h4><p><img src="https://cdn.ocrud.com/img/202204111835427.png" srcset="/img/loading.gif" lazyload alt="未插入前订单表数据"></p>
+<h4 id="JMeter"><a href="#JMeter" class="headerlink" title="JMeter"></a>JMeter</h4><p><img src="https://cdn.ocrud.com/img/202204111836187.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="测试后数据"><a href="#测试后数据" class="headerlink" title="测试后数据"></a>测试后数据</h3><h4 id="代金券表数据"><a href="#代金券表数据" class="headerlink" title="代金券表数据"></a>代金券表数据</h4><p><img src="https://cdn.ocrud.com/img/202204111850277.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="订单表数据"><a href="#订单表数据" class="headerlink" title="订单表数据"></a>订单表数据</h4><p><img src="https://cdn.ocrud.com/img/202204111850758.png" srcset="/img/loading.gif" lazyload></p>
+<p>压力测试通过</p>
+<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><ol>
+<li><p><strong>JDK8 LocalDatetime Redis序列化问题</strong>  在配置文件中解决</p>
+</li>
+<li><p><strong>RabbitMQ 传输对象序列化问题</strong>  采用用json字符串序列反序列解决</p>
+</li>
+</ol>
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>项目地址 <a target="_blank" rel="noopener" href="https://github.com/hugqq/Redis">https://github.com/hugqq/Redis</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/redis/" class="category-chain-item">redis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/redis/">#redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis应用-抢购优惠券</div>
+      <div>https://ocrud.com/2022/04/10/Redis应用-抢购优惠券/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ocrud</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月10日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/11/Redis%E5%BA%94%E7%94%A8-%E5%A5%BD%E5%8F%8B%E5%8A%9F%E8%83%BD/" title="Redis应用-好友功能">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis应用-好友功能</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/06/SQL%E9%80%9F%E6%9F%A5/" title="SQL速查">
+                        <span class="hidden-mobile">SQL速查</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.17/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA","path":"window.location.pathname","placeholder":"来了就说句话把!","avatar":"mp","meta":["nick","mail"],"requiredFields":["nick","mail"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      黑ICP备18004540号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

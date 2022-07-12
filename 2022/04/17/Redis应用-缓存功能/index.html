@@ -1,0 +1,948 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ocrud">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis应用-缓存功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis应用-缓存功能">
+<meta property="og:url" content="https://ocrud.com/2022/04/17/Redis%E5%BA%94%E7%94%A8-%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:site_name" content="Ocrud">
+<meta property="og:description" content="Redis应用-缓存功能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+<meta property="article:published_time" content="2022-04-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-12T07:03:39.331Z">
+<meta property="article:author" content="ocrud">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Redis应用-缓存功能 - Ocrud</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ocrud.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":"https://lapi.ocrud.com","path":"window.location.pathname","ignore_local":false,"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA"}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ocrud</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                整理
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/archives/">
+                    
+                    归档
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/categories/">
+                    
+                    分类
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/tags/">
+                    
+                    标签
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                生活
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/">
+                    
+                    书单
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/movies/">
+                    
+                    影单
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                工具
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/file/index">
+                    
+                    文件预览
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://file.ocrud.com/">
+                    
+                    个人网盘
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://life.ocrud.com/">
+                    
+                    听听歌曲
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/dog/dog.html">
+                    
+                    舔狗日记
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.processon.com/">
+                    
+                    在线绘图
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://app.diagrams.net/">
+                    
+                    在线绘图2
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://ocrud.com/nav/#/sim">
+                <i class="iconfont icon-link-fill"></i>
+                导航
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://cdn.ocrud.com/blog/bg15.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Redis应用-缓存功能</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-17 00:00" pubdate>
+          2022年4月17日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          61 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis应用-缓存功能</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="缓存功能"><a href="#缓存功能" class="headerlink" title="缓存功能"></a>缓存功能</h1><h2 id="缓存概念"><a href="#缓存概念" class="headerlink" title="缓存概念"></a>缓存概念</h2><p>缓存是介于应用程序和物理数据源之间，其作用是为了降低应用程序对物理数据源访问的频次，从而提高了应用的运行性能。缓存内的数据是对物理数据源中的数据的复制，应用程序在运行时从缓存读写数据，在特定的时刻或事件会同步缓存和物理数据源的数据。比如我们通常是直接查询MySQL数据库，那在高并发情况下，大量查询MySQL数据库会导致数据库性能变慢，因此我们在应用层与MySQL之间搭建一个Cache层，让请求先访问Cache，这样就能大大降低数据库的压力，提高性能。</p>
+<h2 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h2><p>在分布式系统开发中，系统与系统之间都属于进程级别，缓存系统也能跨进程叫分布式缓存，市面上分布式缓存技术有Memcached和Redis这两种。二者区别大致如下：</p>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>性能上都很出色，具体到细节，由于Redis只使用单核，而Memcached可以使用多核，所以平均每一个核上Redis在存储小数据时比Memcached性能更高。而在100K以上的数据中，Memcached性能要高于Redis，虽然Redis最近也在存储大数据的性能上进行优化，但是比起 Memcached，还是稍有逊色。</p>
+<h3 id="内存空间和数据量大小"><a href="#内存空间和数据量大小" class="headerlink" title="内存空间和数据量大小"></a>内存空间和数据量大小</h3><p>MemCached可以修改最大内存，采用LRU算法。Redis增加了VM的特性，突破了物理内存的限制。</p>
+<h3 id="操作比较"><a href="#操作比较" class="headerlink" title="操作比较"></a>操作比较</h3><p>MemCached数据结构单一，仅用来缓存数据，而Redis支持更加丰富的数据类型，也可以在服务器端直接对数据进行丰富的操作,这样可以减少网络IO次数和数据体积。</p>
+<h3 id="可靠性"><a href="#可靠性" class="headerlink" title="可靠性"></a>可靠性</h3><p>MemCached不支持数据持久化，断电或重启后数据消失，但其稳定性是有保证的。Redis支持数据持久化和数据恢复，允许单点故障，但是同时也会付出性能的代价。</p>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>Memcached：动态系统中减轻数据库负载，提升性能；做缓存，适合多读少写。 Redis：适用于对读写效率要求都很高，数据处理业务复杂和对安全性要求较高的系统。</p>
+<h3 id="需要慎重考虑的部分"><a href="#需要慎重考虑的部分" class="headerlink" title="需要慎重考虑的部分"></a><strong>需要慎重考虑的部分</strong></h3><ol>
+<li>Memcached单个key-value大小有限，一个value最大只支持1MB，而Redis最大支持512MB</li>
+<li>Memcached只是个内存缓存，对可靠性无要求；而Redis更倾向于内存数据库，因此对对可靠性方 面要求比较高</li>
+<li>从本质上讲，Memcached只是一个单一key-value内存Cache；而Redis则是一个数据结构内存数据 库，支持多种数据类型，因此Redis除单纯缓存作用外，还可以处理一些简单的逻辑运算，Redis不 仅可以缓存，而且还可以作为数据库用</li>
+<li>Redis还可以集群分布式，也就是说集群本身均衡客户端请求，各个节点可以交流，可拓展行、可 维护性更强大。而Memcached的集群则通过第三方才能搭建</li>
+</ol>
+<h2 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h2><p>使用Redis做缓存的话，数据的存储结构有两种，一种采用<code>strings</code>存储，另外使用<code>hashes</code>存储。那使用哪种更好呢？得具体情况具体分析：</p>
+<ul>
+<li><code>strings</code>存储比较简单的，固定的数据，比如存储一个简单的用户信息(用户名、昵称、头像、年龄等)。存储时需要将数据进行序列化，获取时要反序列化。在数据量较小的情况下还是可以忽略这种开销的</li>
+<li>但如果存储的的数据可能某些属性会有些变化，比如餐厅数据中，它有likeVotes(喜欢)和dislikeVotes(不喜欢)的数量，这类变的数据，那么我们采用<code>hashes</code>会更好，而且存储的时候没有序列化开销</li>
+<li>官方推荐使用<code>hashes</code></li>
+</ul>
+<h3 id="加入缓存"><a href="#加入缓存" class="headerlink" title="加入缓存"></a>加入缓存</h3><p>将餐厅添加到缓存时有<strong>全量添加</strong>和<strong>增量添加</strong></p>
+<h4 id="全量添加"><a href="#全量添加" class="headerlink" title="全量添加"></a>全量添加</h4><p>在某些特殊情况，比如初始化数据或缓存出现异常，没有将数据进行同步时，这时需要进行全量的数据同步。</p>
+<p>全量同步方式有两种：一种是<strong>逐条插入</strong>，另一种是<strong>批量插入</strong>，下面对两种方式进行对比：</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 逐行插入</span>
+<span class="hljs-meta">@Test</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testSyncForHash</span><span class="hljs-params">()</span> &#123;
+    List&lt;Restaurants&gt; restaurants = restaurantsService.list();
+    <span class="hljs-type">long</span> <span class="hljs-variable">start</span> <span class="hljs-operator">=</span> System.currentTimeMillis();
+    restaurants.forEach(restaurant -&gt; &#123;
+        Map&lt;String, Object&gt; restaurantMap = BeanUtil.beanToMap(restaurant);
+        <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> Constant.REDIS_POINTS_KEY + restaurant.getId();
+        redisTemplate.opsForHash().putAll(key, restaurantMap);
+    &#125;);
+    <span class="hljs-type">long</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> System.currentTimeMillis();
+    log.info(<span class="hljs-string">&quot;执行时间：&#123;&#125;&quot;</span>, end - start);
+&#125;</code></pre></div>
+
+
+
+<p>逐条插入就是遍历数据集，使用<code>redisTemplate.opsForHash().putAll(key, restaurantMap);</code>插入即可</p>
+<h5 id="Pipeline管道批量插入"><a href="#Pipeline管道批量插入" class="headerlink" title="Pipeline管道批量插入"></a>Pipeline管道批量插入</h5><p>批量插入使用<code>pipeline</code>指令完成。</p>
+<p>Redis是一种基于客户端-服务端模型以及请求/响应协议的TCP服务。当请求进来以后，都是经过服务器进行返回，那如果服务器没有响应时，那么其他请求进入等待。这时服务器也无法处理新请求，那有没有办法解决呢？使用管道就能解决，即：将<em>多个命令</em>发送到服务器，而不用等待回复，最后在一个步骤中读取该答复。这种技术应用非常广泛比如MySQL的批量插入就如此。</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// Pipeline 管道插入</span>
+   <span class="hljs-meta">@Test</span>
+   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testSyncForHashPipeline</span><span class="hljs-params">()</span> &#123;
+       List&lt;Restaurants&gt; restaurants = restaurantsService.list();
+       <span class="hljs-type">long</span> <span class="hljs-variable">start</span> <span class="hljs-operator">=</span> System.currentTimeMillis();
+       List&lt;Long&gt; list = redisTemplate.executePipelined((RedisCallback&lt;Long&gt;) connection -&gt; &#123;
+           <span class="hljs-keyword">for</span> (Restaurants restaurant : restaurants) &#123;
+               <span class="hljs-keyword">try</span> &#123;
+                   <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> Constant.REDIS_POINTS_KEY + restaurant.getId();
+                   Map&lt;String, Object&gt; restaurantMap = BeanUtil.beanToMap(restaurant);
+                   <span class="hljs-type">StringRedisSerializer</span> <span class="hljs-variable">stringRedisSerializer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringRedisSerializer</span>();
+                   <span class="hljs-type">Jackson2JsonRedisSerializer</span> <span class="hljs-variable">jackson2JsonRedisSerializer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Jackson2JsonRedisSerializer</span>(Object.class);
+                   Map&lt;<span class="hljs-type">byte</span>[], <span class="hljs-type">byte</span>[]&gt; restaurantStringMap = Maps.newHashMap();
+                   restaurantMap.forEach((k, v) -&gt; &#123;
+                       restaurantStringMap.put(stringRedisSerializer.serialize(k), jackson2JsonRedisSerializer.serialize(v));
+                   &#125;);
+                   connection.hMSet(stringRedisSerializer.serialize(key), restaurantStringMap);
+               &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;
+                   log.info(restaurant.toString());
+                   <span class="hljs-keyword">continue</span>;
+               &#125;
+           &#125;
+           <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+       &#125;);
+       <span class="hljs-type">long</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> System.currentTimeMillis();
+       log.info(<span class="hljs-string">&quot;执行时间：&#123;&#125;&quot;</span>, end - start);
+   &#125;</code></pre></div>
+
+<h2 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h2><p>先查询缓存 –&gt; 缓存没有 –&gt; 查询数据库（在更新缓存）</p>
+<div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> Dict <span class="hljs-title function_">getByIdCache</span><span class="hljs-params">(String id)</span> &#123;
+      <span class="hljs-type">Dict</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> Dict.create();
+      <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> Constant.REDIS_POINTS_KEY + id;
+      <span class="hljs-type">LinkedHashMap</span> <span class="hljs-variable">restaurantMap</span> <span class="hljs-operator">=</span> (LinkedHashMap) redisTemplate.opsForHash().entries(key);
+      <span class="hljs-comment">// 如果缓存不存在，查询数据库</span>
+      <span class="hljs-type">Restaurants</span> <span class="hljs-variable">restaurant</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+      <span class="hljs-keyword">if</span> (restaurantMap == <span class="hljs-literal">null</span> || restaurantMap.isEmpty()) &#123;
+          log.info(<span class="hljs-string">&quot;缓存失效了，查询数据库：&#123;&#125;&quot;</span>, id);
+          <span class="hljs-comment">// 查询数据库</span>
+          restaurant = getById(id);
+          <span class="hljs-keyword">if</span> (restaurant != <span class="hljs-literal">null</span>) &#123;
+              <span class="hljs-comment">// 更新缓存</span>
+              redisTemplate.opsForHash().putAll(key, BeanUtil.beanToMap(restaurant));
+          &#125;
+      &#125; <span class="hljs-keyword">else</span> &#123;
+          restaurant = BeanUtil.fillBeanWithMap(restaurantMap,
+                  <span class="hljs-keyword">new</span> <span class="hljs-title class_">Restaurants</span>(), <span class="hljs-literal">false</span>);
+      &#125;
+      r.put(<span class="hljs-string">&quot;data&quot;</span>, restaurant);
+      <span class="hljs-keyword">return</span> r;
+  &#125;</code></pre></div>
+
+<h2 id="缓存异常解决"><a href="#缓存异常解决" class="headerlink" title="缓存异常解决"></a>缓存异常解决</h2><h3 id="数据不一致"><a href="#数据不一致" class="headerlink" title="数据不一致"></a>数据不一致</h3><h4 id="一致指的是："><a href="#一致指的是：" class="headerlink" title="一致指的是："></a>一致指的是：</h4><p>缓存中有数据，那么，缓存的数据值需要和数据库中的值相同；缓存中本身没有数据，那么，数据库中的值必须是最新值。</p>
+<p>解决方案：</p>
+<p>网上讲的都挺垃圾的</p>
+<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><p>缓存击穿，是指一个key非常热点，在不停的扛着大并发，大并发集中对这一个点进行访问，当这个key在失效的瞬间，持续的大并发就穿破缓存，直接请求数据库，就像在一个屏障上凿开了一个洞。做类电商项目的时候，把这货就称为“爆款”。</p>
+<p>解决方案：</p>
+<p>其实，大多数情况下这种爆款很难对数据库服务器造成压垮性的压力。达到这个级别的公司没有几家的。所以，对主打商品都是早早的做好了准备，让缓存永不过期。即便某些商品自己发酵成了爆款，也是直接设为永不过期就好了。</p>
+<p>(1) 从redis上看，确实没有设置过期时间，这就保证了，不会出现热点key过期问题，也就是“物理”不过期。</p>
+<p>(2) 从功能上看，如果不过期，那不就成静态的了吗？所以我们把过期时间存在key对应的value里，如果发现要过期了，通过一个后台的异步线程进行缓存的构建，也就是“逻辑”过期。</p>
+<p>(3) 配置spring-cache spring.cache.redis.cache-null-values=true  这个缓存时间要设的少一点，例如15秒就够，如果设置过长，会导致正常的缓存也无法使用。</p>
+<h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><p>缓存穿透，是指查询一个数据库一定不存在的数据。正常的使用缓存流程大致是，数据查询先进行缓存查询，如果key不存在或者key已经过期，再对数据库进行查询，并把查询到的对象，放进缓存。如果数据库查询对象为空，则不放进缓存，就会每次都去查询数据库，而每次查询都是空，每次又都不会进行缓存。假如有恶意攻击，就可以利用这个漏洞，对数据库造成压力，甚至压垮数据库，导致所有的请求都怼到数据库上，从而数据库连接异常。</p>
+<p>解决方案:</p>
+<p>(1)利用互斥锁，缓存失效的时候，先去获得锁，得到锁了，再去请求数据库。没得到锁，则休眠一段时间重试</p>
+<p>(2)采用异步更新策略，无论key是否取到值，都直接返回。value值中维护一个缓存失效时间，缓存如果过期，异步起一个线程去读数据库，更新缓存。需要做缓存预热(项目启动前，先加载缓存)操作。</p>
+<p>(3)提供一个能迅速判断请求是否有效的拦截机制，比如，利用布隆过滤器，内部维护一系列合法有效的key。迅速判断出，请求所携带的Key是否合法有效。如果不合法，则直接返回。</p>
+<p>(4) 如果从数据库查询的对象为空，也放入缓存，只是设定的缓存过期时间较短，比如设置为60秒。</p>
+<p>(5) @Cacheable(cacheNames=”xxx”, sync=”true”)</p>
+<h3 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h3><p>缓存雪崩，是指缓存同一时间大面积的失效，这个时候又来了一波请求，结果请求都怼到数据库上，从而导致数据库连接异常。</p>
+<p>产生雪崩的原因之一，比如商城马上就要到双十一零点，很快就会迎来一波抢购，这波商品时间比较集中的放入了缓存，假设缓存一个小时。那么到了凌晨一点钟的时候，这批商品的缓存就都过期了。而对这批商品的访问查询，都落到了数据库上，对于数据库而言，就会产生周期性的压力波峰。</p>
+<p>其实集中过期，倒不是非常致命，比较致命的缓存雪崩，是缓存服务器某个节点宕机或断网。因为自然形成的缓存雪崩，一定是在某个时间段集中创建缓存，那么那个时候数据库也是可以顶住压力的，无非就是对数据库产生周期性的压力而已。而缓存服务节点的宕机，对数据库服务器造成的压力是不可预知的，很有可能瞬间就把数据库压垮。</p>
+<p>解决方案：</p>
+<p>做电商项目的时候，一般是采取不同分类商品，缓存不同周期。在同一分类中的商品，加上一个随机因子。这样能尽可能分散缓存过期时间，而且，热门类目的商品缓存时间长一些，冷门类目的商品缓存时间短一些，也能节省缓存服务的资源。</p>
+<p>(1)给缓存的失效时间，加上一个随机值，避免集体失效。</p>
+<p>(2)使用互斥锁，但是该方案吞吐量明显下降了。</p>
+<p>(3)双缓存。我们有两个缓存，缓存A和缓存B。缓存A的失效时间为20分钟，缓存B不设失效时间。自己做缓存预热操作。然后细分以下几个小点</p>
+<p>a. 从缓存A读数据，有则直接返回</p>
+<p>b. A没有数据，直接从B读数据，直接返回，并且异步启动一个更新线程。</p>
+<p>c. 更新线程同时更新缓存A和缓存B。</p>
+<p>(4)雪崩时进行服务降级。降级的最终目的是保证核心服务可用，即使是有损的。非核心数据直接返回默认值或错误。</p>
+<p>(5)限流熔断，当数据库负载突升时，暂停业务应用对缓存的访问。</p>
+<h3 id="缓存淘汰"><a href="#缓存淘汰" class="headerlink" title="缓存淘汰"></a>缓存淘汰</h3><h4 id="最大内存参数"><a href="#最大内存参数" class="headerlink" title="最大内存参数"></a>最大内存参数</h4><p>我们的redis数据库的最大缓存、主键失效、淘汰机制等参数都是通过配置文件来配置的。这个文件是我们的redis.config文件。</p>
+<p><code>maxmemory &lt;bytes&gt;</code>：设置最大内存</p>
+<h4 id="内存淘汰策略"><a href="#内存淘汰策略" class="headerlink" title="内存淘汰策略"></a>内存淘汰策略</h4><p>截至目前 redis 一共为我们提供了八个不同的内存置换策略。很早之前提供了6种。</p>
+<div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># maxmemory &lt;bytes&gt;</span>
+
+<span class="hljs-comment"># MAXMEMORY POLICY: how Redis will select what to remove when maxmemory</span>
+<span class="hljs-comment"># is reached. You can select among five behaviors:</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># volatile-lru -&gt; Evict using approximated LRU among the keys with an expire set.</span>
+<span class="hljs-comment"># allkeys-lru -&gt; Evict any key using approximated LRU.</span>
+<span class="hljs-comment"># volatile-lfu -&gt; Evict using approximated LFU among the keys with an expire set.</span>
+<span class="hljs-comment"># allkeys-lfu -&gt; Evict any key using approximated LFU.</span>
+<span class="hljs-comment"># volatile-random -&gt; Remove a random key among the ones with an expire set.</span>
+<span class="hljs-comment"># allkeys-random -&gt; Remove a random key, any key.</span>
+<span class="hljs-comment"># volatile-ttl -&gt; Remove the key with the nearest expire time (minor TTL)</span>
+<span class="hljs-comment"># noeviction -&gt; Don&#x27;t evict anything, just return an error on write operations.</span></code></pre></div>
+
+<p>（1）volatile-lru：从已设置过期时间的数据集中挑选最近最少使用的数据淘汰。</p>
+<p>（2）volatile-ttl：从已设置过期时间的数据集中挑选将要过期的数据淘汰。</p>
+<p>（3）volatile-random：从已设置过期时间的数据集中任意选择数据淘汰。</p>
+<p>（4）volatile-lfu：从已设置过期时间的数据集挑选使用频率最低的数据淘汰。</p>
+<p>（5）allkeys-lru：从数据集中挑选最近最少使用的数据淘汰</p>
+<p>（6）allkeys-lfu：从数据集中挑选使用频率最低的数据淘汰</p>
+<p>（7）allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</p>
+<p>（8） no-enviction（驱逐）：禁止驱逐数据，这也是默认策略。意思是当内存不足以容纳新入数据时，新写入操作就会报错，请求可以继续进行，线上任务也不能持续进行，采用no-enviction策略可以保证数据不被丢失。</p>
+<h4 id="淘汰机制的实现"><a href="#淘汰机制的实现" class="headerlink" title="淘汰机制的实现"></a>淘汰机制的实现</h4><p>既然是淘汰，那就需要把这些数据给删除，然后保存新的。</p>
+<p>Redis 删除策略主要有以下几种：</p>
+<ul>
+<li><strong>惰性删除：</strong>master节点每次读取命令时都会检查键是否超时，如果超时则执行del命令删除键对象，之后异步把del命令slave节点，这样可以保证数据复制的一致性，slave节点是永远不会主动去删除超时数据的。</li>
+<li><strong>定时删除：</strong>Redis的master节点在内部定时任务，会循环采样一定数量的键，当发现采样的键过期时，会执行del命令，之后再同步个slave节点。</li>
+<li><strong>主动删除</strong>：当前已用内存超过maxMemory限定时，触发主动清理策略。主动设置的前提是设置了maxMemory的值。</li>
+</ul>
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>项目地址 <a target="_blank" rel="noopener" href="https://github.com/hugqq/Redis">https://github.com/hugqq/Redis</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/redis/" class="category-chain-item">redis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/redis/">#redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis应用-缓存功能</div>
+      <div>https://ocrud.com/2022/04/17/Redis应用-缓存功能/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ocrud</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月17日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/21/Docker%E9%80%9F%E6%9F%A5/" title="Docker速查">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Docker速查</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/14/Redis%E5%BA%94%E7%94%A8-%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/" title="Redis应用-附近的人">
+                        <span class="hidden-mobile">Redis应用-附近的人</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.17/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA","path":"window.location.pathname","placeholder":"来了就说句话把!","avatar":"mp","meta":["nick","mail"],"requiredFields":["nick","mail"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      黑ICP备18004540号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

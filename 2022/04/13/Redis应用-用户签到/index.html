@@ -1,0 +1,1132 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ocrud">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis应用-用户签到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis应用-用户签到">
+<meta property="og:url" content="https://ocrud.com/2022/04/13/Redis%E5%BA%94%E7%94%A8-%E7%94%A8%E6%88%B7%E7%AD%BE%E5%88%B0/index.html">
+<meta property="og:site_name" content="Ocrud">
+<meta property="og:description" content="Redis应用-用户签到">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+<meta property="article:published_time" content="2022-04-13T10:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-12T07:03:39.329Z">
+<meta property="article:author" content="ocrud">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Redis应用-用户签到 - Ocrud</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ocrud.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":"https://lapi.ocrud.com","path":"window.location.pathname","ignore_local":false,"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA"}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ocrud</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                整理
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/archives/">
+                    
+                    归档
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/categories/">
+                    
+                    分类
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/tags/">
+                    
+                    标签
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                生活
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/">
+                    
+                    书单
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/movies/">
+                    
+                    影单
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                工具
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/file/index">
+                    
+                    文件预览
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://file.ocrud.com/">
+                    
+                    个人网盘
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://life.ocrud.com/">
+                    
+                    听听歌曲
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/dog/dog.html">
+                    
+                    舔狗日记
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.processon.com/">
+                    
+                    在线绘图
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://app.diagrams.net/">
+                    
+                    在线绘图2
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://ocrud.com/nav/#/sim">
+                <i class="iconfont icon-link-fill"></i>
+                导航
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://cdn.ocrud.com/blog/bg15.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Redis应用-用户签到</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-13 18:00" pubdate>
+          2022年4月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          68 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis应用-用户签到</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="用户签到"><a href="#用户签到" class="headerlink" title="用户签到"></a>用户签到</h1><h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>在很多互联网应用中，我们会存在签到送积分、签到领取奖励等这样的需求，比如：</p>
+<ul>
+<li>签到1天送10积分，连续签到2天送20积分，3天送30积分，4天以上均送50积分等。</li>
+<li>如果连续签到中断，则重置计数，每月初重置计数。</li>
+<li>显示用户某个月的签到次数。</li>
+<li>在日历控件上展示用户每月签到情况，可以切换年月显示。</li>
+</ul>
+<h2 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h2><h3 id="数据库解决"><a href="#数据库解决" class="headerlink" title="数据库解决"></a>数据库解决</h3><p>最简单的设计思路就是利用关系型数据库保存签到数据（t_user_sign），如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段名</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">id</td>
+<td align="left">数据表主键（AUTO_INCREMENT）</td>
+</tr>
+<tr>
+<td align="left">fk_user_id</td>
+<td align="left">用户ID</td>
+</tr>
+<tr>
+<td align="left">sign_date</td>
+<td align="left">签到日期（如2022-01-01）</td>
+</tr>
+<tr>
+<td align="left">amount</td>
+<td align="left">连续签到天数（如2）</td>
+</tr>
+</tbody></table>
+<ul>
+<li>用户签到：往此表插入一条数据，并更新连续签到天数；</li>
+<li>查询根据签到日期查询</li>
+<li>统计根据amount统计</li>
+</ul>
+<p>如果这样存数据的话，对于用户量比较大的应用，数据库可能就扛不住，比如1000W用户，一天一条，那么一个月就是3亿数据，这是非常庞大的。</p>
+<h3 id="使用Redis的Bitmaps完成"><a href="#使用Redis的Bitmaps完成" class="headerlink" title="使用Redis的Bitmaps完成"></a>使用Redis的Bitmaps完成</h3><p>Bitmaps叫位图，它不是Redis的基本数据类型（比如Strings、Lists、Sets、Hashes这类实际的数据类型），而是基于String数据类型的按位操作，高阶数据类型的一种。Bitmaps支持的最大位数是2^32位。使用512M内存就可以存储多达42.9亿的字节信息（2^32 = 4,294,967,296）</p>
+<p>它是由一组bit位组成的，每个bit位对应0和1两个状态，虽然内部还是采用String类型存储，但Redis提供了一些指令用于直接操作位图，可以把它看作是一个bit数组，数组的下标就是偏移量。它的优点是内存开销小、效率高且操作简单，很适合用于签到这类场景。比如按月进行存储，一个月最多31天，那么我们将该月用户的签到缓存二进制就是00000000000000000000000000000000，当某天签到将0改成1即可，而且Redis提供对bitmap的很多操作比如存储、获取、统计等指令，使用起来非常方便。</p>
+<h2 id="BitMaps常用指令"><a href="#BitMaps常用指令" class="headerlink" title="BitMaps常用指令"></a>BitMaps常用指令</h2><p class="note note-success">负数偏移量表示倒数第几  简写@LBN（last but number）</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">功能</th>
+<th align="left">参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">SETBIT</td>
+<td align="left">指定偏移量bit位置设置值</td>
+<td align="left">key offset value【0=&lt; offset&lt; 2^32】</td>
+</tr>
+<tr>
+<td align="left">GETBIT</td>
+<td align="left">查询指定偏移位置的bit值</td>
+<td align="left">key offset</td>
+</tr>
+<tr>
+<td align="left">BITCOUNT</td>
+<td align="left">统计指定字节区间bit为1的数量</td>
+<td align="left">key [start end]【@LBN】</td>
+</tr>
+<tr>
+<td align="left">BITFIELD</td>
+<td align="left">操作多字节位域</td>
+<td align="left">key [GET type offset] [SET type offset value] [INCRBY type offset increment] [OVERFLOW WRAP/SAT/FAIL]</td>
+</tr>
+<tr>
+<td align="left">BITPOS</td>
+<td align="left">查询指定字节区间第一个被设置成1的bit位的位置</td>
+<td align="left">key bit [start] [end]【@LBN】</td>
+</tr>
+</tbody></table>
+<p>考虑到每月初需要重置连续签到次数，最简单的方式是按用户每月存一条签到数据（也可以每年存一条数据）。Key的格式为<code>user:sign:userid:yyyyMM</code>，Value则采用长度为4个字节（32位）的位图（最大月份只有31天）。位图的每一位代表一天的签到，1表示已签，0表示未签。<strong>从高位插入，也就是说左边位算是开始日期。</strong></p>
+<p>例如<code>user:sign:1:202204</code>表示用户id=1的用户在2022年4月的签到记录。那么</p>
+<div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># 2022年4月1号签到</span>
+127.0.0.1:0&gt;SETBIT user:sign:1:202204 0 1
+<span class="hljs-string">&quot;1&quot;</span>
+
+<span class="hljs-comment"># 2022年4月2号签到</span>
+127.0.0.1:0&gt;SETBIT user:sign:1:202204 1 1
+<span class="hljs-string">&quot;1&quot;</span>
+
+<span class="hljs-comment"># 2022年4月3号签到</span>
+127.0.0.1:0&gt;SETBIT user:sign:1:202204 2 1
+<span class="hljs-string">&quot;1&quot;</span>
+
+<span class="hljs-comment"># 2022年4月4号签到</span>
+127.0.0.1:0&gt;SETBIT user:sign:1:202204 3 1
+<span class="hljs-string">&quot;1&quot;</span>
+
+<span class="hljs-comment"># 获取2022年4月4号签到情况</span>
+127.0.0.1:0&gt;GETBIT user:sign:1:202204 3
+<span class="hljs-string">&quot;1&quot;</span>
+
+<span class="hljs-comment"># 统计2022年4月签到次数</span>
+127.0.0.1:0&gt;BITCOUNT user:sign:1:202204 
+<span class="hljs-string">&quot;4&quot;</span>
+
+<span class="hljs-comment"># 获取2022年4月首次签到</span>
+127.0.0.1:0&gt;BITPOS user:sign:1:202204 1
+<span class="hljs-string">&quot;0&quot;</span>
+
+<span class="hljs-comment"># 获取2022年4月前3签到情况,返回7，二进制111，意味着前三天都签到了</span>
+127.0.0.1:0&gt;BITFIELD user:sign:1:202204 get u3 0
+<span class="hljs-string">&quot;7&quot;</span></code></pre></div>
+
+
+
+<h2 id="核心业务代码"><a href="#核心业务代码" class="headerlink" title="核心业务代码"></a>核心业务代码</h2><div class="code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment">  * 用户签到</span>
+<span class="hljs-comment">  * 获取登录用户信息</span>
+<span class="hljs-comment">  * 根据日期获取当前是多少号（使用BITSET指令关注时，offset从0开始计算，0就代表1号）</span>
+<span class="hljs-comment">  * 构建用户按月存储key（user:sign:用户id:月份）</span>
+<span class="hljs-comment">  * 判断用户是否签到（GETBIT指令）</span>
+<span class="hljs-comment">  * 用户签到（SETBIT）</span>
+<span class="hljs-comment">  * 返回用户连续签到次数（BITFIELD key GET [u/i] type offset value， 获取从用户从当前日期开始到1号的所有签到状态，然后进行位移操作，获取连续签到天数）</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> userId  登录用户</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> dateStr 查询的日期，默认当天 yyyy-MM-dd</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@return</span> 连续签到次数</span>
+<span class="hljs-comment">  */</span>
+ <span class="hljs-meta">@Override</span>
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">doSign</span><span class="hljs-params">(Integer userId, String dateStr)</span> &#123;
+     <span class="hljs-comment">// 获取日期</span>
+     <span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> getDate(dateStr);
+     <span class="hljs-comment">// 获取日期对应的天数，多少号 从 0 开始</span>
+     <span class="hljs-type">int</span> <span class="hljs-variable">offset</span> <span class="hljs-operator">=</span> DateUtil.dayOfMonth(date) - <span class="hljs-number">1</span>;
+     <span class="hljs-comment">// 构建 Key</span>
+     <span class="hljs-type">String</span> <span class="hljs-variable">signKey</span> <span class="hljs-operator">=</span> buildSignKey(userId, date);
+     <span class="hljs-comment">// 查看是否已签到</span>
+     <span class="hljs-type">boolean</span> <span class="hljs-variable">isSigned</span> <span class="hljs-operator">=</span> redisTemplate.opsForValue().getBit(signKey, offset);
+     Assert.isFalse(isSigned, <span class="hljs-string">&quot;当前日期已完成签到，无需再签&quot;</span>);
+     <span class="hljs-comment">// 签到</span>
+     redisTemplate.opsForValue().setBit(signKey, offset, <span class="hljs-literal">true</span>);
+     <span class="hljs-comment">// 统计连续签到次数</span>
+     <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> getContinuousSignCount(userId, date);
+     <span class="hljs-keyword">return</span> count;
+ &#125;
+
+
+ <span class="hljs-comment">/**</span>
+<span class="hljs-comment">  * 统计某月连续签到次数</span>
+<span class="hljs-comment">  *</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> userId 用户ID</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> date   日期</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@return</span> 当月连续签到次数</span>
+<span class="hljs-comment">  */</span>
+ <span class="hljs-meta">@Override</span>
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getContinuousSignCount</span><span class="hljs-params">(Integer userId, Date date)</span> &#123;
+     <span class="hljs-comment">// 获取日期对应的天数，多少号</span>
+     <span class="hljs-type">int</span> <span class="hljs-variable">dayOfMonth</span> <span class="hljs-operator">=</span> DateUtil.dayOfMonth(date);
+     <span class="hljs-comment">// 构建 Key</span>
+     <span class="hljs-type">String</span> <span class="hljs-variable">signKey</span> <span class="hljs-operator">=</span> buildSignKey(userId, date);
+     <span class="hljs-comment">// 命令：bitfield key get [u/i]offset value</span>
+     <span class="hljs-comment">// 此命令就是get取出key对应的位图，指定value索引位开始，取offset位偏移量的二进制</span>
+     <span class="hljs-type">BitFieldSubCommands</span> <span class="hljs-variable">bitFieldSubCommands</span> <span class="hljs-operator">=</span> BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(<span class="hljs-number">0</span>);
+     List&lt;Long&gt; list = redisTemplate.opsForValue().bitField(signKey, bitFieldSubCommands);
+     <span class="hljs-keyword">if</span> (list == <span class="hljs-literal">null</span> || list.isEmpty()) &#123;
+         <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+     &#125;
+     <span class="hljs-type">int</span> <span class="hljs-variable">signCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+     <span class="hljs-type">long</span> <span class="hljs-variable">v</span> <span class="hljs-operator">=</span> list.get(<span class="hljs-number">0</span>) == <span class="hljs-literal">null</span> ? <span class="hljs-number">0</span> : list.get(<span class="hljs-number">0</span>);
+     <span class="hljs-comment">// 取低位连续不为0的个数即为连续签到次数，需考虑当天尚未签到的情况</span>
+     <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> dayOfMonth; i &gt; <span class="hljs-number">0</span>; i--) &#123;<span class="hljs-comment">// i 表示位移次数</span>
+         <span class="hljs-comment">// 右移再左移，如果等于自己说明最低位是 0，表示未签到</span>
+         <span class="hljs-keyword">if</span> (v &gt;&gt; <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">1</span> == v) &#123;
+             <span class="hljs-comment">// 低位为 0 且非当天说明连续签到中断了</span>
+             <span class="hljs-keyword">if</span> (i != dayOfMonth) &#123;
+                 <span class="hljs-keyword">break</span>;
+             &#125;
+         &#125; <span class="hljs-keyword">else</span> &#123;
+             <span class="hljs-comment">// 签到了 签到数加1</span>
+             signCount += <span class="hljs-number">1</span>;
+         &#125;
+         <span class="hljs-comment">// 右移一位并重新赋值，相当于把最右边一位去除</span>
+         v &gt;&gt;= <span class="hljs-number">1</span>;
+     &#125;
+     <span class="hljs-keyword">return</span> signCount;
+ &#125;
+
+
+ <span class="hljs-comment">/**</span>
+<span class="hljs-comment">  * 获取用户签到次数</span>
+<span class="hljs-comment">  *</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> userId  登录token</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> dateStr 查询的日期，默认当月 yyyy-MM-dd</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@return</span> 当前的签到次数</span>
+<span class="hljs-comment">  */</span>
+ <span class="hljs-meta">@Override</span>
+ <span class="hljs-keyword">public</span> <span class="hljs-type">long</span> <span class="hljs-title function_">getSignCount</span><span class="hljs-params">(Integer userId, String dateStr)</span> &#123;
+     <span class="hljs-comment">// 获取日期</span>
+     <span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> getDate(dateStr);
+     <span class="hljs-comment">// 构建 Key</span>
+     <span class="hljs-type">String</span> <span class="hljs-variable">signKey</span> <span class="hljs-operator">=</span> buildSignKey(userId, date);
+     <span class="hljs-comment">// e.g. BITCOUNT user:sign:5:202011</span>
+     <span class="hljs-keyword">return</span> (Long) redisTemplate.execute((RedisCallback&lt;Long&gt;) con -&gt; con.bitCount(signKey.getBytes()));
+ &#125;
+
+
+ <span class="hljs-comment">/**</span>
+<span class="hljs-comment">  * 获取当月签到情况</span>
+<span class="hljs-comment">  * 获取登录用户信息</span>
+<span class="hljs-comment">  * 构建Redis保存的Key</span>
+<span class="hljs-comment">  * 获取月份的总天数（考虑2月闰、平年）</span>
+<span class="hljs-comment">  * 通过BITFIELD指令获取当前月的所有签到数据</span>
+<span class="hljs-comment">  * 遍历进行判断是否签到，并存入TreeMap方便排序</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> userId  登录token</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> dateStr 查询的日期，默认当月 yyyy-MM-dd</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@return</span> Key为签到日期，Value为签到状态的Map</span>
+<span class="hljs-comment">  */</span>
+ <span class="hljs-meta">@Override</span>
+ <span class="hljs-keyword">public</span> Map&lt;String, Boolean&gt; <span class="hljs-title function_">getSignInfo</span><span class="hljs-params">(Integer userId, String dateStr)</span> &#123;
+     <span class="hljs-comment">// 获取日期</span>
+     <span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> getDate(dateStr);
+     <span class="hljs-comment">// 构建 Key</span>
+     <span class="hljs-type">String</span> <span class="hljs-variable">signKey</span> <span class="hljs-operator">=</span> buildSignKey(userId, date);
+     <span class="hljs-comment">// 构建一个自动排序的 Map</span>
+     Map&lt;String, Boolean&gt; signInfo = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeMap</span>&lt;&gt;();
+     <span class="hljs-comment">// 获取某月的总天数（考虑闰年）</span>
+     <span class="hljs-type">int</span> <span class="hljs-variable">dayOfMonth</span> <span class="hljs-operator">=</span> DateUtil.lengthOfMonth(DateUtil.month(date) + <span class="hljs-number">1</span>, DateUtil.isLeapYear(DateUtil.dayOfYear(date)));
+     <span class="hljs-comment">// 命令：bitfield key get [u/i]offset value</span>
+     <span class="hljs-comment">// 此命令就是get取出key对应的位图，指定value索引位开始，取offset位偏移量的二进制</span>
+     <span class="hljs-comment">// 获取某月最后一天的数值（取无符号整数）</span>
+     <span class="hljs-type">BitFieldSubCommands</span> <span class="hljs-variable">bitFieldSubCommands</span> <span class="hljs-operator">=</span> BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(<span class="hljs-number">0</span>);
+     List&lt;Long&gt; list = redisTemplate.opsForValue().bitField(signKey, bitFieldSubCommands);
+     <span class="hljs-keyword">if</span> (list == <span class="hljs-literal">null</span> || list.isEmpty()) &#123;
+         <span class="hljs-keyword">return</span> signInfo;
+     &#125;
+     <span class="hljs-type">long</span> <span class="hljs-variable">v</span> <span class="hljs-operator">=</span> list.get(<span class="hljs-number">0</span>) == <span class="hljs-literal">null</span> ? <span class="hljs-number">0</span> : list.get(<span class="hljs-number">0</span>);
+     <span class="hljs-comment">// 由低位到高位进行遍历，为 0 表示未签，为 1 表示已签</span>
+     <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> dayOfMonth; i &gt; <span class="hljs-number">0</span>; i--) &#123;
+         <span class="hljs-comment">// 获取日期时间，比如 i = 31，最终拿到 yyyyMM31</span>
+         <span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">dateTime</span> <span class="hljs-operator">=</span> LocalDateTimeUtil.of(date).withDayOfMonth(i);
+         <span class="hljs-comment">// 先右移一位再左移一位，如果还不变那只能证明低位是 0，否则低位就是 1</span>
+         <span class="hljs-type">boolean</span> <span class="hljs-variable">flag</span> <span class="hljs-operator">=</span> v &gt;&gt; <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">1</span> != v;
+         <span class="hljs-comment">// 构建一个 Key 为日期，value 为是否签到标记的有序 Map</span>
+         signInfo.put(DateUtil.format(dateTime, <span class="hljs-string">&quot;yyyy-MM-dd&quot;</span>), flag);
+         <span class="hljs-comment">// 右移一位并重新赋值，相当于把最右边一位去除</span>
+         v &gt;&gt;= <span class="hljs-number">1</span>;
+     &#125;
+     <span class="hljs-keyword">return</span> signInfo;
+ &#125;
+
+
+ <span class="hljs-comment">/**</span>
+<span class="hljs-comment">  * 获取首次签到日期</span>
+<span class="hljs-comment">  *</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> userId</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> dateStr 查询的日期，默认当月 yyyy-MM-dd</span>
+<span class="hljs-comment">  */</span>
+ <span class="hljs-meta">@Override</span>
+ <span class="hljs-keyword">public</span> Dict <span class="hljs-title function_">getFirstTimeSignInfo</span><span class="hljs-params">(Integer userId, String dateStr)</span> &#123;
+     <span class="hljs-comment">// 获取日期</span>
+     <span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> getDate(dateStr);
+     <span class="hljs-comment">// 构建 Key</span>
+     <span class="hljs-type">String</span> <span class="hljs-variable">signKey</span> <span class="hljs-operator">=</span> buildSignKey(userId, date);
+     Map&lt;String, Boolean&gt; info = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();
+     List&lt;String&gt; keys = Arrays.asList(signKey);
+     DefaultRedisScript&lt;Long&gt; redisScript = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DefaultRedisScript</span>&lt;&gt;(<span class="hljs-string">&quot;local result = tonumber(redis.call(&#x27;BITPOS&#x27;, KEYS[1], 1));\n&quot;</span> + <span class="hljs-string">&quot;if (result &gt; -1) then\n&quot;</span> + <span class="hljs-string">&quot;    return result;\n&quot;</span> + <span class="hljs-string">&quot;end;\n&quot;</span> + <span class="hljs-string">&quot;return -1;\n&quot;</span>);
+     redisScript.setResultType(Long.class);
+     <span class="hljs-type">Long</span> <span class="hljs-variable">execute</span> <span class="hljs-operator">=</span> (Long) redisTemplate.execute(redisScript, keys) + <span class="hljs-number">1</span>;
+     <span class="hljs-keyword">if</span> (execute != -<span class="hljs-number">1</span>) &#123;
+         <span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">dateTime</span> <span class="hljs-operator">=</span> LocalDateTimeUtil.of(date).withDayOfMonth(Math.toIntExact(execute));
+         <span class="hljs-type">String</span> <span class="hljs-variable">format</span> <span class="hljs-operator">=</span> DateUtil.format(dateTime, <span class="hljs-string">&quot;yyyy-MM-dd&quot;</span>);
+         <span class="hljs-keyword">return</span> Dict.create().set(<span class="hljs-string">&quot;data&quot;</span>, format);
+     &#125; <span class="hljs-keyword">else</span> &#123;
+         <span class="hljs-keyword">return</span> Dict.create().set(<span class="hljs-string">&quot;data&quot;</span>, <span class="hljs-string">&quot;无数据&quot;</span>);
+     &#125;
+ &#125;
+
+ <span class="hljs-comment">/**</span>
+<span class="hljs-comment">  * 获取指定日期签到用户 默认今天</span>
+<span class="hljs-comment">  */</span>
+ <span class="hljs-meta">@Override</span>
+ <span class="hljs-keyword">public</span> Dict <span class="hljs-title function_">getTodaySignUser</span><span class="hljs-params">(String dateStr)</span>&#123;
+     Set&lt;String&gt; keys = redisTemplate.keys(<span class="hljs-string">&quot;user:sign&quot;</span>.concat(<span class="hljs-string">&quot;*&quot;</span>));
+     List&lt;Integer&gt; userIds = Lists. newArrayList();
+     <span class="hljs-keyword">if</span> (CollUtil.isEmpty(keys))&#123;
+         <span class="hljs-keyword">return</span> Dict.create().set(<span class="hljs-string">&quot;data&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;());
+     &#125;
+     <span class="hljs-keyword">for</span> (String key : keys) &#123;
+         <span class="hljs-comment">// 获取日期</span>
+         <span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> getDate(dateStr);
+         <span class="hljs-comment">// 获取日期对应的天数，多少号 从 0 开始</span>
+         <span class="hljs-type">int</span> <span class="hljs-variable">offset</span> <span class="hljs-operator">=</span> DateUtil.dayOfMonth(date) - <span class="hljs-number">1</span>;
+         <span class="hljs-keyword">if</span> (redisTemplate.opsForValue().getBit(key, offset))&#123;
+             <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> ReUtil.extractMulti(<span class="hljs-string">&quot;.*(\\d+):(\\d+)&quot;</span>, key, <span class="hljs-string">&quot;$1&quot;</span>);
+             userIds.add(Integer.valueOf(result));
+         &#125;
+     &#125;
+     <span class="hljs-keyword">return</span> Dict.create().set(<span class="hljs-string">&quot;data&quot;</span>, userIds);
+ &#125;
+
+ <span class="hljs-comment">/**</span>
+<span class="hljs-comment">  * 获取日期</span>
+<span class="hljs-comment">  *</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> dateStr yyyy-MM-dd 默认当天</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">  */</span>
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Date <span class="hljs-title function_">getDate</span><span class="hljs-params">(String dateStr)</span> &#123;
+     <span class="hljs-keyword">if</span> (StrUtil.isBlank(dateStr)) &#123;
+         <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();
+     &#125;
+     <span class="hljs-keyword">try</span> &#123;
+         <span class="hljs-keyword">return</span> DateUtil.parse(dateStr);
+     &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;
+         <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RuntimeException</span>(<span class="hljs-string">&quot;请传入yyyy-MM-dd的日期格式&quot;</span>);
+     &#125;
+ &#125;
+
+
+ <span class="hljs-comment">/**</span>
+<span class="hljs-comment">  * 考虑到每月初需要重置连续签到次数，最简单的方式是按用户每月存一条签到数据（也可以每年存一条数据）。</span>
+<span class="hljs-comment">  * Key的格式为user:sign:uid:yyyyMM，Value则采用长度为4个字节（32位）的位图（最大月份只有31天）。</span>
+<span class="hljs-comment">  * 位图的每一位代表一天的签到，1表示已签，0表示未签。</span>
+<span class="hljs-comment">  * 构建存储Key user:sign:dinerId:yyyyMM</span>
+<span class="hljs-comment">  * e.g. user:sign:1:202204表示userId=1的食客在2022年04月的签到记录。</span>
+<span class="hljs-comment">  *</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@param</span> userId</span>
+<span class="hljs-comment">  * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">  */</span>
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">buildSignKey</span><span class="hljs-params">(<span class="hljs-type">int</span> userId, Date date)</span> &#123;
+     <span class="hljs-keyword">return</span> String.format(<span class="hljs-string">&quot;user:sign:%d:%s&quot;</span>, userId, DateUtil.format(date, <span class="hljs-string">&quot;yyyyMM&quot;</span>));
+ &#125;</code></pre></div>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>Bitmaps最大长度位数是多少？</li>
+</ul>
+<p>由于String数据类型的最大长度是512M，所以String支持的位数是2^32位。512M表示字节Byte长度，换算成位bit需要乘以8，即512 * 2^10 * 2^10 * 8=2^32；</p>
+<ul>
+<li>Bitmaps可以支持超过512M的数据吗？</li>
+</ul>
+<p>Strings的最大长度是512M，还能存更大的数据？当然不能，但是我们可以换种实现思路，就是将大key换成小key，这样存储的大小完全不受限。</p>
+<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p>   <strong>RedisCommandExecutionException</strong><br>       使用的Redis版本太低<br>       Redis5.x下载  <a target="_blank" rel="noopener" href="https://github.com/tporadowski/redis/releases/">https://github.com/tporadowski/redis/releases/</a></p>
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>项目地址 <a target="_blank" rel="noopener" href="https://github.com/hugqq/Redis">https://github.com/hugqq/Redis</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/redis/" class="category-chain-item">redis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/redis/">#redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis应用-用户签到</div>
+      <div>https://ocrud.com/2022/04/13/Redis应用-用户签到/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ocrud</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月13日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/14/Redis%E5%BA%94%E7%94%A8-%E7%94%A8%E6%88%B7%E7%A7%AF%E5%88%86/" title="Redis应用-用户积分">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis应用-用户积分</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/12/Redis%E5%BA%94%E7%94%A8-Feed%E5%8A%9F%E8%83%BD/" title="Redis应用-Feed功能">
+                        <span class="hidden-mobile">Redis应用-Feed功能</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.17/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA","path":"window.location.pathname","placeholder":"来了就说句话把!","avatar":"mp","meta":["nick","mail"],"requiredFields":["nick","mail"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      黑ICP备18004540号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

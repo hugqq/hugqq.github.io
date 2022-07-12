@@ -1,0 +1,1069 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ocrud">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis应用-附近的人">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis应用-附近的人">
+<meta property="og:url" content="https://ocrud.com/2022/04/14/Redis%E5%BA%94%E7%94%A8-%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/index.html">
+<meta property="og:site_name" content="Ocrud">
+<meta property="og:description" content="Redis应用-附近的人">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+<meta property="article:published_time" content="2022-04-14T11:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-12T07:03:39.332Z">
+<meta property="article:author" content="ocrud">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.ocrud.com/blog/bg15.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Redis应用-附近的人 - Ocrud</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ocrud.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":"https://lapi.ocrud.com","path":"window.location.pathname","ignore_local":false,"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA"}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ocrud</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                整理
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/archives/">
+                    
+                    归档
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/categories/">
+                    
+                    分类
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/tags/">
+                    
+                    标签
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                生活
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/">
+                    
+                    书单
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/movies/">
+                    
+                    影单
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                工具
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/file/index">
+                    
+                    文件预览
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://file.ocrud.com/">
+                    
+                    个人网盘
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://life.ocrud.com/">
+                    
+                    听听歌曲
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/dog/dog.html">
+                    
+                    舔狗日记
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.processon.com/">
+                    
+                    在线绘图
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://app.diagrams.net/">
+                    
+                    在线绘图2
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://ocrud.com/nav/#/sim">
+                <i class="iconfont icon-link-fill"></i>
+                导航
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://cdn.ocrud.com/blog/bg15.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Redis应用-附近的人</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-14 19:00" pubdate>
+          2022年4月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          66 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis应用-附近的人</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="附近的人"><a href="#附近的人" class="headerlink" title="附近的人"></a>附近的人</h1><h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>查询附近1公里的人，同时只需查询出20个即可。</p>
+<h2 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h2><p>解决基于地理位置的搜索，很多数据库都支持：MySQL、MongoDB、Redis等都能支持地理位置的存储。</p>
+<ul>
+<li>当用户登录应用时，或者保持用户登录后用户在使用应用时，客户端是可以时刻获取用户位置信息的（前提是用户要开启位置获取的权限），客户端获取到最新的地理位置后，上传到后端服务器进行更新。</li>
+<li>以当前用户的位置为圆点，距离为半径查询相关的用户展示即可完成</li>
+</ul>
+<h2 id="Redis-GEO常用指令"><a href="#Redis-GEO常用指令" class="headerlink" title="Redis GEO常用指令"></a>Redis GEO常用指令</h2><table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">功能</th>
+<th align="left">参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GEOADD</td>
+<td align="left">添加地理位置</td>
+<td align="left">GEOADD key longitude latitude member [longitude latitude member …]</td>
+</tr>
+<tr>
+<td align="left">GEODIST</td>
+<td align="left">两点间的距离</td>
+<td align="left">GEODIST key member1 member2 [unit]</td>
+</tr>
+<tr>
+<td align="left">GEOHASH</td>
+<td align="left">返回标准的Geohash值</td>
+<td align="left">GEOHASH key member [member …]</td>
+</tr>
+<tr>
+<td align="left">GEOPOS</td>
+<td align="left">返回key中给定元素的位置信息（经纬度）</td>
+<td align="left">GEOPOS key member [member …]</td>
+</tr>
+<tr>
+<td align="left">GEOREDIUS</td>
+<td align="left">返回以某点为圆心，距离为半径的其他位置元素</td>
+<td align="left">GEOREDIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]</td>
+</tr>
+<tr>
+<td align="left">GEORADIUSBYMEMBER</td>
+<td align="left">跟GEOREDIUS一样，只不过圆心是给定的member元素</td>
+<td align="left">GEORADIUSBYMEMBER key longitude latitude radius m | km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]</td>
+</tr>
+</tbody></table>
+<h3 id="GEOADD"><a href="#GEOADD" class="headerlink" title="GEOADD"></a>GEOADD</h3><p>GEOADD key longitude latitude member [longitude latitude member …] 添加位置信息</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">添加单个位置</span>
+127.0.0.1:0&gt;GEOADD user:location 121.446617 31.205593 &#x27;zhangsan&#x27;
+&quot;1&quot;
+<span class="hljs-meta prompt_"></span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">添加多个位置信息</span>
+127.0.0.1:0&gt;GEOADD user:location 121.4465774 31.20485103  &#x27;lisi&#x27; 121.44534  31.2031 &#x27;wangwu&#x27;  121.4510648 31.2090667 &#x27;zhangliu&#x27;
+&quot;3&quot;</code></pre></div>
+
+<h3 id="GEODIST"><a href="#GEODIST" class="headerlink" title="GEODIST"></a>GEODIST</h3><p>GEODIST key member1 member2 [unit] 计算距离， 其中unit为单位 m|km|ft（英尺）|mi（英里）</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">计算两点间的距离，返回距离的单位是米（m）</span>
+127.0.0.1:0&gt;GEODIST user:location zhangsan lisi m
+&quot;82.4241&quot;
+<span class="hljs-meta prompt_"># </span><span class="language-bash">计算两点间的距离，返回距离的单位是千米（km）</span>
+127.0.0.1:0&gt;GEODIST user:location zhangsan lisi km
+&quot;0.0824&quot;</code></pre></div>
+
+<h3 id="GEOHASH"><a href="#GEOHASH" class="headerlink" title="GEOHASH"></a>GEOHASH</h3><p>GEOHASH key member [member …] 返回一个或多个位置元素的Geohash。保存到Redis中是用Geohash位置52点整数编码。</p>
+<p>GeoHash将二维的经纬度转换成字符串，比如下图展示了北京9个区域的GeoHash字符串，分别是WX4ER，WX4G2、WX4G3等，每一个字符串代表了某一矩形区域。也就是说，这个矩形区域内所有的点（经纬度坐标）都共享相同的GeoHash字符串，这样既可以保护隐私（只表示大概区域位置而不是具体的点），又比较容易做缓存，比如左上角这个区域内的用户不断发送位置信息请求餐馆数据，由于这些用户的GeoHash字符串都是WX4ER，所以可以把WX4ER当作key，把该区域的餐馆信息当作value来进行缓存，而如果不使用GeoHash的话，由于区域内的用户传来的经纬度是各不相同的，很难做缓存。字符串越长，表示的范围越精确。</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">计算某个位置的GeoHash值</span>
+127.0.0.1:0&gt;GEOHASH user:location zhangsan
+1) &quot;wtw3e8f9z20&quot;</code></pre></div>
+
+<h3 id="GEOPOS"><a href="#GEOPOS" class="headerlink" title="GEOPOS"></a>GEOPOS</h3><p>GEOPOS key member [member …]从<code>key</code>里返回所有给定位置元素的位置（经度和纬度）</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">返回zhangsan和lisi的位置信息</span>
+127.0.0.1:0&gt;GEOPOS user:location zhangsan lisi
+1) 1) &quot;121.44661813974380493&quot;
+   2) &quot;31.20559220971455971&quot;
+2) 1) &quot;121.44657522439956665&quot;
+   2) &quot;31.20485207113603821&quot;</code></pre></div>
+
+<h3 id="GEORADIUS"><a href="#GEORADIUS" class="headerlink" title="GEORADIUS"></a>GEORADIUS</h3><p>GEORADIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]</p>
+<p>给定的经纬度为中心， 返回键包含的位置元素当中， 与中心的距离不超过给定最大距离的所有位置元素。</p>
+<p>范围可以使用以下其中一个单位：</p>
+<ul>
+<li><strong>m</strong> 表示单位为米。</li>
+<li><strong>km</strong> 表示单位为千米。</li>
+<li><strong>mi</strong> 表示单位为英里。</li>
+<li><strong>ft</strong> 表示单位为英尺。</li>
+</ul>
+<p>在给定以下可选项时， 命令会返回额外的信息：</p>
+<ul>
+<li><code>WITHDIST</code>: 在返回位置元素的同时， 将位置元素与中心之间的距离也一并返回。 距离的单位和用户给定的范围单位保持一致。</li>
+<li><code>WITHCOORD</code>: 将位置元素的经度和维度也一并返回。</li>
+<li><code>WITHHASH</code>: 以 52 位有符号整数的形式， 返回位置元素经过原始 geohash 编码的有序集合分值。 这个选项主要用于底层应用或者调试， 实际中的作用并不大。</li>
+</ul>
+<p>命令默认返回未排序的位置元素。 通过以下两个参数， 用户可以指定被返回位置元素的排序方式：</p>
+<ul>
+<li><code>ASC</code>: 根据中心的位置， 按照从近到远的方式返回位置元素。</li>
+<li><code>DESC</code>: 根据中心的位置， 按照从远到近的方式返回位置元素。</li>
+</ul>
+<p>在默认情况下， GEORADIUS 命令会返回所有匹配的位置元素。 虽然用户可以使用 <strong>COUNT</strong> 选项去获取前 N 个匹配元素， 但是因为命令在内部可能会需要对所有被匹配的元素进行处理， 所以在对一个非常大的区域进行搜索时， 即使只使用 <code>COUNT</code> 选项去获取少量元素， 命令的执行速度也可能会非常慢。 但是从另一方面来说， 使用 <code>COUNT</code> 选项去减少需要返回的元素数量， 对于减少带宽来说仍然是非常有用的。</p>
+<div class="code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">以121.446617 31.205593(张三位置)为圆心，3000m为半径，查询返回用户及其位置</span>
+127.0.0.1:0&gt;GEORADIUS user:location 121.446617 31.205593 3000 m WITHCOORD 
+1) 1) &quot;wangwu&quot;
+   2) 1) &quot;121.44534140825271606&quot;
+      2) &quot;31.20310057881493293&quot;
+
+
+2) 1) &quot;lisi&quot;
+   2) 1) &quot;121.44657522439956665&quot;
+      2) &quot;31.20485207113603821&quot;
+
+
+3) 1) &quot;zhangsan&quot;
+   2) 1) &quot;121.44661813974380493&quot;
+      2) &quot;31.20559220971455971&quot;
+
+
+4) 1) &quot;zhangliu&quot;
+   2) 1) &quot;121.45106524229049683&quot;
+      2) &quot;31.20906731242401833&quot;
+<span class="hljs-meta prompt_"></span>
+<span class="hljs-meta prompt_"></span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">以121.446617 31.205593(张三位置)为圆心，3000m为半径，查询返回用户及其距离(单位是米)</span>
+127.0.0.1:0&gt;GEORADIUS user:location 121.446617 31.205593 3000 m WITHDIST
+1) 1) &quot;wangwu&quot;
+   2) &quot;302.6202&quot;
+
+2) 1) &quot;lisi&quot;
+   2) &quot;82.5066&quot;
+
+3) 1) &quot;zhangsan&quot;
+   2) &quot;0.1396&quot;
+
+4) 1) &quot;zhangliu&quot;
+   2) &quot;573.0651&quot;
+<span class="hljs-meta prompt_">  </span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">以121.446617 31.205593(张三位置)为圆心，3000m为半径，查询返回用户及其距离(单位是米) 由近及远</span>
+47.110.246.98:15&gt;GEORADIUS user:location 121.446617 31.205593 3000 m WITHDIST ASC
+1) 1) &quot;zhangsan&quot;
+   2) &quot;0.1396&quot;
+
+2) 1) &quot;lisi&quot;
+   2) &quot;82.5066&quot;
+
+3) 1) &quot;wangwu&quot;
+   2) &quot;302.6202&quot;
+
+4) 1) &quot;zhangliu&quot;
+   2) &quot;573.0651&quot;
+  
+<span class="hljs-meta prompt_"></span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">以121.446617 31.205593(张三位置)为圆心，3000m为半径，查询返回用户及其GeoHash值</span>
+127.0.0.1:0&gt;GEORADIUS user:location 121.446617 31.205593 3000 m WITHHASH
+1) 1) &quot;wangwu&quot;
+   2) &quot;4054756135204337&quot;
+
+2) 1) &quot;lisi&quot;
+   2) &quot;4054756138536712&quot;
+
+3) 1) &quot;zhangsan&quot;
+   2) &quot;4054756138736536&quot;
+
+4) 1) &quot;zhangliu&quot;
+   2) &quot;4054756186304127&quot;
+<span class="hljs-meta prompt_"></span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">以121.446617 31.205593(张三位置)为圆心，3000m为半径，查询返回用户及其GeoHash值去2个</span>
+127.0.0.1:0&gt;GEORADIUS user:location 121.446617 31.205593 3000 m WITHHASH COUNT 2
+1) 1) &quot;zhangsan&quot;
+   2) &quot;4054756138736536&quot;
+
+2) 1) &quot;lisi&quot;
+   2) &quot;4054756138536712&quot;</code></pre></div>
+
+<h3 id="GEORADIUSBYMEMBER"><a href="#GEORADIUSBYMEMBER" class="headerlink" title="GEORADIUSBYMEMBER"></a>GEORADIUSBYMEMBER</h3><p>GEORADIUSBYMEMBER key member radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]，这个命令和 GEORADIUS 命令一样， 都可以找出位于指定范围内的元素， 但是 GEORADIUSBYMEMBER 的中心点是由给定的位置元素决定的， 而不是像 GEORADIUS 那样， 使用输入的经度和纬度来决定中心点</p>
+<p>指定成员的位置被用作查询的中心。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>使用<code>GEOADD</code>添加地理位置信息时，用标准格式的参数x,y,所以经度必须在纬度之前。这些坐标的限制是可以被编入索引的，区域面积可以很接近极点但是不能索引。具体的限制，由EPSG:900913 / EPSG:3785 / OSGEO:41001 规定如下：</p>
+<ul>
+<li>有效的经度从-180度到180度。</li>
+<li>有效的纬度从-85.05112878度到85.05112878度。</li>
+</ul>
+<p>当坐标位置超出上述指定范围时，该命令将会返回一个错误。</p>
+<h4 id="它是如何工作的？"><a href="#它是如何工作的？" class="headerlink" title="它是如何工作的？"></a>它是如何工作的？</h4><p>sorted set使用一种称为Geohash的技术进行填充。经度和纬度的位是交错的，以形成一个独特的52位整数. 我们知道，一个sorted set 的double score可以代表一个52位的整数，而不会失去精度。</p>
+<p>这种格式允许半径查询检查的1 + 8个领域需要覆盖整个半径，并丢弃元素以外的半径。通过计算该区域的范围，通过计算所涵盖的范围，从不太重要的部分的排序集的得分，并计算得分范围为每个区域的sorted set中的查询。</p>
+<h4 id="使用什么样的地球模型（Earth-model）？"><a href="#使用什么样的地球模型（Earth-model）？" class="headerlink" title="使用什么样的地球模型（Earth model）？"></a>使用什么样的地球模型（Earth model）？</h4><p>这只是假设地球是一个球体，因为使用的距离公式是Haversine公式。这个公式仅适用于地球，而不是一个完美的球体。当在社交网站和其他大多数需要查询半径的应用中使用时，这些偏差都不算问题。但是，在最坏的情况下的偏差可能是0.5%，所以一些地理位置很关键的应用还是需要谨慎考虑。</p>
+<h2 id="部分代码"><a href="#部分代码" class="headerlink" title="部分代码"></a>部分代码</h2><div class="code-wrapper"><pre><code class="hljs java">  <span class="hljs-comment">/**</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> userId 当前登录用户</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> lon    经度</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> lat    维度</span>
+<span class="hljs-comment">    */</span>
+   <span class="hljs-meta">@Override</span>
+   <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addUserLocation</span><span class="hljs-params">(Integer userId, Float lon, Float lat)</span> &#123;
+       <span class="hljs-comment">// 参数校验</span>
+       Assert.isFalse(lon == <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;获取精度失败&quot;</span>);
+       Assert.isFalse(lat == <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;获取维度失败&quot;</span>);
+       <span class="hljs-comment">// 获取 key user:location</span>
+       <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> Constant.REDIS_LOCATION_KEY;
+       RedisGeoCommands.<span class="hljs-type">GeoLocation</span> <span class="hljs-variable">geoLocation</span> <span class="hljs-operator">=</span> 
+           <span class="hljs-keyword">new</span> <span class="hljs-title class_">RedisGeoCommands</span>.GeoLocation(userId, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Point</span>(lon, lat));
+       redisTemplate.opsForGeo().add(key, geoLocation);
+   &#125;
+
+
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment">    * 获取附近的人</span>
+<span class="hljs-comment">    * 获取登录用户id</span>
+<span class="hljs-comment">    * 获取查询半径，以米为单位，默认1000m</span>
+<span class="hljs-comment">    * 获取用户的经纬度，如果客户端没上传经纬度，那么从Redis中读取经纬度</span>
+<span class="hljs-comment">    * 格式化查询的半径，使用RedisTemplate的Distance对象</span>
+<span class="hljs-comment">    * 查询限制条件：限制20，返回包含距离，按由近及远排序</span>
+<span class="hljs-comment">    * 格式化结果，将其封装到Map中，Key为userId，Value构建返回的VO，同时格式化distance属性，方便客户端展示</span>
+<span class="hljs-comment">    * 查询附近的人的信息，并添加到对应的VO中</span>
+<span class="hljs-comment">    * 返回结果</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> userId 登录</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> radius 半径(m)，默认1000m</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> lon    经度</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@param</span> lat    纬度</span>
+<span class="hljs-comment">    * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">    */</span>
+   <span class="hljs-meta">@Override</span>
+   <span class="hljs-keyword">public</span> List&lt;NearMeUserVO&gt; <span class="hljs-title function_">findNearMe</span><span class="hljs-params">(Integer userId, Integer radius, Float lon, Float lat)</span> &#123;
+       <span class="hljs-comment">// 查询半径，默认 1000m</span>
+       <span class="hljs-keyword">if</span> (radius == <span class="hljs-literal">null</span>) &#123;
+           radius = <span class="hljs-number">1000</span>;
+       &#125;
+       <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> Constant.REDIS_LOCATION_KEY;
+       <span class="hljs-comment">// 获取用户经纬度</span>
+       <span class="hljs-type">Point</span> <span class="hljs-variable">point</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+       <span class="hljs-keyword">if</span> (lon == <span class="hljs-literal">null</span> || lat == <span class="hljs-literal">null</span>) &#123;
+           <span class="hljs-comment">// 如果经纬度没传，那么从 Redis 中获取，但客户端传入会比较精确</span>
+           List&lt;Point&gt; points = redisTemplate.opsForGeo().position(key, userId);
+           Assert.isFalse(points == <span class="hljs-literal">null</span> || points.isEmpty(), <span class="hljs-string">&quot;获取经纬度失败！&quot;</span>);
+           point = points.get(<span class="hljs-number">0</span>);
+       &#125; <span class="hljs-keyword">else</span> &#123;
+           point = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Point</span>(lon, lat);
+       &#125;
+
+       <span class="hljs-comment">// 初始化距离对象，单位 m</span>
+       <span class="hljs-type">Distance</span> <span class="hljs-variable">distance</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Distance</span>(radius, RedisGeoCommands.DistanceUnit.METERS);
+       <span class="hljs-comment">// 初始化 Geo 命令参数对象</span>
+       RedisGeoCommands.<span class="hljs-type">GeoRadiusCommandArgs</span> <span class="hljs-variable">args</span> <span class="hljs-operator">=</span> RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs();
+       <span class="hljs-comment">// 附近的人限制 20，包含距离，按由近及远排序</span>
+       args.limit(<span class="hljs-number">20</span>).includeDistance().sortAscending();
+       <span class="hljs-comment">// 以用户经纬度为圆心，范围 1000m</span>
+       <span class="hljs-type">Circle</span> <span class="hljs-variable">circle</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Circle</span>(point, distance);
+       <span class="hljs-comment">// 获取附近的人 GeoLocation 信息</span>
+       GeoResults&lt;RedisGeoCommands.GeoLocation&lt;Integer&gt;&gt; results = redisTemplate.opsForGeo().radius(key, circle, args);
+       List&lt;NearMeUserVO&gt; list = Lists.newArrayList();
+       <span class="hljs-comment">// 循环处理距离信息</span>
+       results.forEach(result -&gt; &#123;
+           <span class="hljs-comment">// 获取 locationName 也就是userId ID</span>
+           RedisGeoCommands.GeoLocation&lt;Integer&gt; location = result.getContent();
+           <span class="hljs-type">NearMeUserVO</span> <span class="hljs-variable">nearMeDinerVO</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NearMeUserVO</span>();
+           nearMeDinerVO.setUserId(location.getName());
+           <span class="hljs-comment">// 格式化距离</span>
+           <span class="hljs-type">Double</span> <span class="hljs-variable">dist</span> <span class="hljs-operator">=</span> result.getDistance().getValue();
+           <span class="hljs-comment">// 四舍五入精确到小数点 1 位，为了方便客户端显示</span>
+           <span class="hljs-comment">// 这里后期需要扩展处理，根据距离显示 m km</span>
+           <span class="hljs-type">String</span> <span class="hljs-variable">distanceStr</span> <span class="hljs-operator">=</span> NumberUtil.round(dist, <span class="hljs-number">1</span>).toString() + <span class="hljs-string">&quot;m&quot;</span>;
+           nearMeDinerVO.setDistance(distanceStr);
+           list.add(nearMeDinerVO);
+       &#125;);
+       <span class="hljs-keyword">return</span> list;
+   &#125;
+   <span class="hljs-comment">/**</span>
+<span class="hljs-comment">    * 计算两点之间的距离</span>
+<span class="hljs-comment">    * GEODIST key l1 l2 [m|km|ft|mi]</span>
+<span class="hljs-comment">    */</span>
+   <span class="hljs-meta">@Override</span>
+   <span class="hljs-keyword">public</span> String <span class="hljs-title function_">distance</span><span class="hljs-params">(Integer userId, Integer toUserId)</span> &#123;
+       Assert.isFalse(userId == <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;获取用户失败！&quot;</span>);
+       Assert.isFalse(toUserId == <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;获取对象失败！&quot;</span>);
+       <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> Constant.REDIS_LOCATION_KEY;
+       <span class="hljs-type">Distance</span> <span class="hljs-variable">distance</span> <span class="hljs-operator">=</span> redisTemplate.opsForGeo().distance(key, userId, toUserId, Metrics.MILES);
+       <span class="hljs-keyword">return</span>  NumberUtil.round(distance.getValue(), <span class="hljs-number">1</span>).toString() + <span class="hljs-string">&quot;m&quot;</span>;
+   &#125;</code></pre></div>
+
+
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>项目地址 <a target="_blank" rel="noopener" href="https://github.com/hugqq/Redis">https://github.com/hugqq/Redis</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/redis/" class="category-chain-item">redis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/redis/">#redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis应用-附近的人</div>
+      <div>https://ocrud.com/2022/04/14/Redis应用-附近的人/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ocrud</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月14日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/17/Redis%E5%BA%94%E7%94%A8-%E7%BC%93%E5%AD%98%E5%8A%9F%E8%83%BD/" title="Redis应用-缓存功能">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis应用-缓存功能</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/14/Redis%E5%BA%94%E7%94%A8-%E7%94%A8%E6%88%B7%E7%A7%AF%E5%88%86/" title="Redis应用-用户积分">
+                        <span class="hidden-mobile">Redis应用-用户积分</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.17/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA","path":"window.location.pathname","placeholder":"来了就说句话把!","avatar":"mp","meta":["nick","mail"],"requiredFields":["nick","mail"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      黑ICP备18004540号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

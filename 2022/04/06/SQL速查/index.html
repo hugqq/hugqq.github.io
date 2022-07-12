@@ -1,0 +1,1722 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ocrud">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SQL速查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL速查">
+<meta property="og:url" content="https://ocrud.com/2022/04/06/SQL%E9%80%9F%E6%9F%A5/index.html">
+<meta property="og:site_name" content="Ocrud">
+<meta property="og:description" content="SQL速查">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.ocrud.com/blog/bg13.png">
+<meta property="article:published_time" content="2022-04-06T05:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-12T07:03:39.333Z">
+<meta property="article:author" content="ocrud">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.ocrud.com/blog/bg13.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>SQL速查 - Ocrud</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ocrud.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":"https://lapi.ocrud.com","path":"window.location.pathname","ignore_local":false,"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA"}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ocrud</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                整理
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/archives/">
+                    
+                    归档
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/categories/">
+                    
+                    分类
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/tags/">
+                    
+                    标签
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                生活
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/">
+                    
+                    书单
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/movies/">
+                    
+                    影单
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                工具
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/file/index">
+                    
+                    文件预览
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://file.ocrud.com/">
+                    
+                    个人网盘
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://life.ocrud.com/">
+                    
+                    听听歌曲
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/dog/dog.html">
+                    
+                    舔狗日记
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.processon.com/">
+                    
+                    在线绘图
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://app.diagrams.net/">
+                    
+                    在线绘图2
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://ocrud.com/nav/#/sim">
+                <i class="iconfont icon-link-fill"></i>
+                导航
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://cdn.ocrud.com/blog/bg13.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">SQL速查</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-06 13:00" pubdate>
+          2022年4月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          114 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SQL速查</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="SQL-速查表"><a href="#SQL-速查表" class="headerlink" title="SQL 速查表"></a>SQL 速查表</h1><h2 id="文本处理函数"><a href="#文本处理函数" class="headerlink" title="文本处理函数"></a>文本处理函数</h2><table>
+<thead>
+<tr>
+<th align="center">文本处理函数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ASCII(char)</td>
+<td align="center">返回字符的ASCII码值</td>
+</tr>
+<tr>
+<td align="center">BIT_LENGTH(str)</td>
+<td align="center">返回字符串的比特长度</td>
+</tr>
+<tr>
+<td align="center">CONCAT(s1,s2…,sn)</td>
+<td align="center">将s1,s2…,sn连接成字符串</td>
+</tr>
+<tr>
+<td align="center">CONCAT_WS(sep,s1,s2…,sn)</td>
+<td align="center">将s1,s2…,sn连接成字符串，并用sep字符间隔</td>
+</tr>
+<tr>
+<td align="center">INSERT(str,x,y,instr)</td>
+<td align="center">将字符串str从第x位置开始，y个字符长的子串替换为字符串instr，返回结果</td>
+</tr>
+<tr>
+<td align="center">FIND_IN_SET(str,list)</td>
+<td align="center">分析逗号分隔的list列表，如果发现str，返回str在list中的位置</td>
+</tr>
+<tr>
+<td align="center">REGEXP(str)</td>
+<td align="center">正则匹配</td>
+</tr>
+<tr>
+<td align="center">LCASE(str)或LOWER(str)</td>
+<td align="center">返回将字符串str中所有字符改变为小写后的结果</td>
+</tr>
+<tr>
+<td align="center">LEFT(str,x)</td>
+<td align="center">返回字符串str中最左边的x个字符</td>
+</tr>
+<tr>
+<td align="center">LENGTH(s)</td>
+<td align="center">返回字符串str中的字符数</td>
+</tr>
+<tr>
+<td align="center">LTRIM(str)</td>
+<td align="center">从字符串str中切掉开头的空格</td>
+</tr>
+<tr>
+<td align="center">POSITION(substr,str)</td>
+<td align="center">返回子串substr在字符串str中第一次出现的位置</td>
+</tr>
+<tr>
+<td align="center">QUOTE(str)</td>
+<td align="center">用反斜杠转义str中的单引号</td>
+</tr>
+<tr>
+<td align="center">REPEAT(str,srchstr,rplcstr)</td>
+<td align="center">返回字符串str重复x次的结果</td>
+</tr>
+<tr>
+<td align="center">REVERSE(str)</td>
+<td align="center">返回颠倒字符串str的结果</td>
+</tr>
+<tr>
+<td align="center">RIGHT(str,x)</td>
+<td align="center">返回字符串str中最右边的x个字符</td>
+</tr>
+<tr>
+<td align="center">RTRIM(str)</td>
+<td align="center">返回字符串str尾部的空格</td>
+</tr>
+<tr>
+<td align="center">STRCMP(s1,s2)</td>
+<td align="center">比较字符串s1和s2</td>
+</tr>
+<tr>
+<td align="center">TRIM(str)</td>
+<td align="center">去除字符串首部和尾部的所有空格</td>
+</tr>
+<tr>
+<td align="center">UCASE(str)或UPPER(str)</td>
+<td align="center">返 回将字符串str中所有字符转变为大写后的结果</td>
+</tr>
+</tbody></table>
+<h2 id="数字处理函数"><a href="#数字处理函数" class="headerlink" title="数字处理函数"></a>数字处理函数</h2><table>
+<thead>
+<tr>
+<th align="center">数字处理函数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ABS(x)</td>
+<td align="center">返回x的绝对值</td>
+</tr>
+<tr>
+<td align="center">BIN(x)</td>
+<td align="center">返回x的二进制（OCT返回八进制，HEX返回十六进制）</td>
+</tr>
+<tr>
+<td align="center">CEILING(x)</td>
+<td align="center">返回大于x的最小整数值</td>
+</tr>
+<tr>
+<td align="center">EXP(x)</td>
+<td align="center">返回值e（自然对数的底）的x次方</td>
+</tr>
+<tr>
+<td align="center">FLOOR(x)</td>
+<td align="center">返回小于x的最大整数值</td>
+</tr>
+<tr>
+<td align="center">GREATEST(x1,x2,…,xn)</td>
+<td align="center">返回集合中最大的值</td>
+</tr>
+<tr>
+<td align="center">LEAST(x1,x2,…,xn)</td>
+<td align="center">返回集合中最小的值</td>
+</tr>
+<tr>
+<td align="center">LN(x)</td>
+<td align="center">返回x的自然对数</td>
+</tr>
+<tr>
+<td align="center">LOG(x,y)</td>
+<td align="center">返回x的以y为底的对数</td>
+</tr>
+<tr>
+<td align="center">MOD(x,y)</td>
+<td align="center">返回x/y的模（余数）</td>
+</tr>
+<tr>
+<td align="center">PI()</td>
+<td align="center">返回pi的值（圆周率）</td>
+</tr>
+<tr>
+<td align="center">RAND()</td>
+<td align="center">返回０到１内的随机值,可以通过提供一个参数(种子)使RAND()随机数生成器生成一个指定的值。</td>
+</tr>
+<tr>
+<td align="center">ROUND(x,y)</td>
+<td align="center">返回参数x的四舍五入的有y位小数的值</td>
+</tr>
+<tr>
+<td align="center">SIGN(x)</td>
+<td align="center">返回代表数字x的符号的值</td>
+</tr>
+<tr>
+<td align="center">SQRT(x)</td>
+<td align="center">返回一个数的平方根</td>
+</tr>
+<tr>
+<td align="center">TRUNCATE(x,y)</td>
+<td align="center">返回数字x截短为y位小数的结果</td>
+</tr>
+</tbody></table>
+<h2 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h2><table>
+<thead>
+<tr>
+<th align="center">聚合函数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AVG(X)</td>
+<td align="center">返回指定列的平均值</td>
+</tr>
+<tr>
+<td align="center">COUNT(X)</td>
+<td align="center">返回指定列中非NULL值的个数</td>
+</tr>
+<tr>
+<td align="center">MIN(X)</td>
+<td align="center">返回指定列的最小值</td>
+</tr>
+<tr>
+<td align="center">MAX(X)</td>
+<td align="center">返回指定列的最大值</td>
+</tr>
+<tr>
+<td align="center">SUM(X)</td>
+<td align="center">返回指定列的所有值之和</td>
+</tr>
+<tr>
+<td align="center">GROUP_CONCAT(X)</td>
+<td align="center">返回由属于一组的列值连接组合而成的结果</td>
+</tr>
+</tbody></table>
+<h2 id="地址转换函数"><a href="#地址转换函数" class="headerlink" title="地址转换函数"></a>地址转换函数</h2><table>
+<thead>
+<tr>
+<th align="center">地址转换函数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">INET_ATON(‘127.0.0.1’)</td>
+<td align="center">将点分十进制IP地址转换成网络字节序IP地址</td>
+</tr>
+<tr>
+<td align="center">INET_NTOA(2130706433)</td>
+<td align="center">网络字节序IP转化点分十进制IP</td>
+</tr>
+</tbody></table>
+<h2 id="专用窗口函数"><a href="#专用窗口函数" class="headerlink" title="专用窗口函数"></a>专用窗口函数</h2><table>
+<thead>
+<tr>
+<th align="center">专用窗口函数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">RANK() OVER ()</td>
+<td align="center">如果有并列名次的行，会占用下一名次的位置</td>
+</tr>
+<tr>
+<td align="center">DENSE_RANK() OVER ()</td>
+<td align="center">如果有并列名次的行，不占用下一名次的位置</td>
+</tr>
+<tr>
+<td align="center">ROW_NUMBER() OVER ()</td>
+<td align="center">不考虑并列名次的情况</td>
+</tr>
+<tr>
+<td align="center">LAG() OVER()</td>
+<td align="center">回顾多行并从当前行访问行的数据</td>
+</tr>
+<tr>
+<td align="center">LEAD() OVER()</td>
+<td align="center">向前看多行并从当前行访问行的数据</td>
+</tr>
+</tbody></table>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/92654574">https://zhuanlan.zhihu.com/p/92654574</a></p>
+<h2 id="日期时间获取函数"><a href="#日期时间获取函数" class="headerlink" title="日期时间获取函数"></a>日期时间获取函数</h2><h3 id="获得当前日期-时间（date-time）函数"><a href="#获得当前日期-时间（date-time）函数" class="headerlink" title="获得当前日期+时间（date + time）函数"></a>获得当前日期+时间（date + time）函数</h3><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> now();
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">current_timestamp</span>();
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">current_timestamp</span>;
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">localtime</span>();
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">localtime</span>;
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">localtimestamp</span>;
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">localtimestamp</span>();
+<span class="hljs-keyword">select</span> sysdate();
+<span class="hljs-comment">--  now() 在执行开始时值就得到</span>
+<span class="hljs-comment">--  sysdate() 在函数执行时动态得到值 一般情况下很少用到</span></code></pre></div>
+
+<h3 id="获得当前日期（date）函数"><a href="#获得当前日期（date）函数" class="headerlink" title="获得当前日期（date）函数"></a>获得当前日期（date）函数</h3> <div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> curdate();
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">current_date</span>();
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">current_date</span>;</code></pre></div>
+
+<h3 id="获得当前时间（time）函数"><a href="#获得当前时间（time）函数" class="headerlink" title="获得当前时间（time）函数"></a>获得当前时间（time）函数</h3><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> curtime();
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">current_time</span>();
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">current_time</span>;</code></pre></div>
+
+<h3 id="获得当前-UTC-日期时间函数"><a href="#获得当前-UTC-日期时间函数" class="headerlink" title="获得当前 UTC 日期时间函数"></a>获得当前 UTC 日期时间函数</h3><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> utc_timestamp();
+<span class="hljs-comment">-- utc日期（date）函数</span>
+<span class="hljs-keyword">select</span> utc_date();
+<span class="hljs-comment">-- utc时间（time）函数</span>
+<span class="hljs-keyword">select</span> utc_time();</code></pre></div>
+
+<h3 id="MySQL-日期时间选取函数"><a href="#MySQL-日期时间选取函数" class="headerlink" title="MySQL 日期时间选取函数"></a>MySQL 日期时间选取函数</h3><h4 id="获得日期时间的各个部分：日期、时间、年、季度、月、日、小时、分钟、秒、微秒"><a href="#获得日期时间的各个部分：日期、时间、年、季度、月、日、小时、分钟、秒、微秒" class="headerlink" title="获得日期时间的各个部分：日期、时间、年、季度、月、日、小时、分钟、秒、微秒"></a>获得日期时间的各个部分：日期、时间、年、季度、月、日、小时、分钟、秒、微秒</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">set</span>
+<span class="hljs-variable">@date</span> <span class="hljs-operator">=</span> now();
+<span class="hljs-keyword">select</span> <span class="hljs-type">date</span> (<span class="hljs-variable">@date</span>); <span class="hljs-comment">--date</span>
+<span class="hljs-keyword">select</span> <span class="hljs-type">time</span> (<span class="hljs-variable">@date</span>); <span class="hljs-comment">--time       </span>
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">year</span> (<span class="hljs-variable">@date</span>); <span class="hljs-comment">--年       </span>
+<span class="hljs-keyword">select</span> quarter(<span class="hljs-variable">@date</span>); <span class="hljs-comment">--季度    </span>
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">month</span> (<span class="hljs-variable">@date</span>); <span class="hljs-comment">--月      </span>
+<span class="hljs-keyword">select</span> week(<span class="hljs-variable">@date</span>); <span class="hljs-comment">--周     </span>
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">day</span> (<span class="hljs-variable">@date</span>); <span class="hljs-comment">--天       </span>
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">hour</span> (<span class="hljs-variable">@date</span>); <span class="hljs-comment">--小时       </span>
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">minute</span> (<span class="hljs-variable">@date</span>); <span class="hljs-comment">--分钟     </span>
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">second</span> (<span class="hljs-variable">@date</span>); <span class="hljs-comment">--秒     </span>
+<span class="hljs-keyword">select</span> microsecond(<span class="hljs-variable">@date</span>); <span class="hljs-comment">--微秒 </span>
+
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(<span class="hljs-keyword">year</span> <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(quarter <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(<span class="hljs-keyword">month</span> <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(week <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(<span class="hljs-keyword">day</span> <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(<span class="hljs-keyword">hour</span> <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(<span class="hljs-keyword">minute</span> <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(<span class="hljs-keyword">second</span> <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(microsecond <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(year_month <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(day_hour <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(day_minute <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(day_second <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(day_microsecond <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(hour_minute <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(hour_second <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(hour_microsecond <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(minute_second <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(minute_microsecond <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">extract</span>(second_microsecond <span class="hljs-keyword">from</span> <span class="hljs-variable">@date</span>);</code></pre></div>
+
+<h4 id="获得日期参数，在一周、一月、一年中第几天"><a href="#获得日期参数，在一周、一月、一年中第几天" class="headerlink" title="获得日期参数，在一周、一月、一年中第几天"></a>获得日期参数，在一周、一月、一年中第几天</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">set</span>
+<span class="hljs-variable">@date</span> <span class="hljs-operator">=</span> now();
+<span class="hljs-keyword">select</span> dayofweek(<span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> dayofmonth(<span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> dayofyear(<span class="hljs-variable">@date</span>);
+<span class="hljs-comment">-- 是一周中的第n天（1 = Sunday, 2 = Monday, …, 7 = Saturday）；</span>
+<span class="hljs-comment">-- 一月中的第n天；一年中的第n天。</span></code></pre></div>
+
+<h4 id="获得日期参数，在一周、一月、一年中第几周"><a href="#获得日期参数，在一周、一月、一年中第几周" class="headerlink" title="获得日期参数，在一周、一月、一年中第几周"></a>获得日期参数，在一周、一月、一年中第几周</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">set</span>
+<span class="hljs-variable">@date</span> <span class="hljs-operator">=</span> now();
+<span class="hljs-keyword">select</span> week(<span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> week(<span class="hljs-variable">@date</span>, <span class="hljs-number">3</span>);
+<span class="hljs-comment">-- weekofyear(@date) 等价于 week(@date,3)</span>
+<span class="hljs-keyword">select</span> weekofyear(<span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> dayofweek(<span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> weekday(<span class="hljs-variable">@date</span>);
+<span class="hljs-keyword">select</span> yearweek(<span class="hljs-variable">@date</span>);
+weekday
+：
+(<span class="hljs-number">0</span> <span class="hljs-operator">=</span> Monday, <span class="hljs-number">1</span> <span class="hljs-operator">=</span> Tuesday,
+…, <span class="hljs-number">6</span> <span class="hljs-operator">=</span> Sunday);
+dayofweek
+：（
+<span class="hljs-number">1</span>
+<span class="hljs-operator">=</span> Sunday, <span class="hljs-number">2</span> <span class="hljs-operator">=</span> Monday,
+…, <span class="hljs-number">7</span> <span class="hljs-operator">=</span> Saturday);</code></pre></div>
+
+<ul>
+<li>week(date, mode)<ul>
+<li>date是要获取周数的日期。</li>
+<li>mode是一个可选参数，用于确定周数计算的逻辑。它允许您指定本周是从星期一还是星期日开始，返回的周数应在0到52之间或0到53之间</li>
+<li>0 星期天 0-53 遇到本年的第一个星期天开始，是第一周。前面的计算为第0周。</li>
+<li>1 星期一 0-53 假如第一周能超过3天，那么计算为本年的第一周。否则为第0周</li>
+<li>2 星期天 1-53 遇到本年的第一个星期天开始，是第一周。 前面的计算为上年度的第5x周。</li>
+<li>3 星期一 1-53 假如第一周能超过3天，那么计算为本年的第一周。否则为上年度的第5x周。</li>
+<li>4 星期天 0-53 假如第一周能超过3天，那么计算为本年的第一周。否则为第0周</li>
+<li>5 星期一 0-53 遇到本年的第一个星期一开始，是第一周。 前面的计算为第0周。</li>
+<li>6 星期天 1-53 假如第一周能超过3天，那么计算为本年的第一周。否则为上年度的第5x周。</li>
+<li>7 星期一 1-53 遇到本年的第一个星期一开始，是第一周。 前面的计算为上年度的第5x周。</li>
+</ul>
+</li>
+</ul>
+<h4 id="获得星期和月份名称函数：dayname-monthname"><a href="#获得星期和月份名称函数：dayname-monthname" class="headerlink" title="获得星期和月份名称函数：dayname(), monthname()"></a>获得星期和月份名称函数：dayname(), monthname()</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">set</span>
+<span class="hljs-variable">@date</span> <span class="hljs-operator">=</span> now();
+<span class="hljs-keyword">select</span> dayname();
+<span class="hljs-keyword">select</span> monthname();
+<span class="hljs-comment">-- 可以设置语言</span>
+<span class="hljs-keyword">set</span>
+lc_time_names<span class="hljs-operator">=</span><span class="hljs-string">&#x27;en_GB&#x27;</span>;  <span class="hljs-comment">--英文</span>
+<span class="hljs-keyword">set</span>
+lc_time_names<span class="hljs-operator">=</span><span class="hljs-string">&#x27;zh_CN&#x27;</span>;  <span class="hljs-comment">--中文</span></code></pre></div>
+
+<p>区域设置值 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/locale-support.html">https://dev.mysql.com/doc/refman/8.0/en/locale-support.html</a></p>
+<h4 id="获得月份中的最后一天-last-day"><a href="#获得月份中的最后一天-last-day" class="headerlink" title="获得月份中的最后一天 : last_day()"></a>获得月份中的最后一天 : last_day()</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> last_day(curdate());
+<span class="hljs-comment">-- 当前月份中有多少天</span>
+<span class="hljs-keyword">select</span> curdate(), <span class="hljs-keyword">day</span> (last_day(curdate())) <span class="hljs-keyword">as</span> days;</code></pre></div>
+
+<h3 id="MySQL-日期时间计算函数"><a href="#MySQL-日期时间计算函数" class="headerlink" title="MySQL 日期时间计算函数"></a>MySQL 日期时间计算函数</h3><h4 id="为日期增加一个时间间隔：date-add"><a href="#为日期增加一个时间间隔：date-add" class="headerlink" title="为日期增加一个时间间隔：date_add()"></a>为日期增加一个时间间隔：date_add()</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">set</span>
+<span class="hljs-variable">@date</span> <span class="hljs-operator">=</span> now();
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> <span class="hljs-keyword">day</span>);
+<span class="hljs-comment">-- 间隔单位：天</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> <span class="hljs-keyword">hour</span>);
+<span class="hljs-comment">-- 间隔单位：小时</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> <span class="hljs-keyword">minute</span>);
+<span class="hljs-comment">-- 间隔单位：分钟</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> <span class="hljs-keyword">second</span>);
+<span class="hljs-comment">-- 间隔单位：秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> microsecond);
+<span class="hljs-comment">--间隔单位：毫秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> week);
+<span class="hljs-comment">-- 间隔单位：星期</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> <span class="hljs-keyword">month</span>);
+<span class="hljs-comment">-- 间隔单位：月</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> quarter);
+<span class="hljs-comment">-- 间隔单位：季度</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> <span class="hljs-keyword">year</span>);
+<span class="hljs-comment">-- 间隔单位：年</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-number">-1</span> <span class="hljs-keyword">day</span>);
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> SECOND_MICROSECOND);
+<span class="hljs-comment">-- 复合型，间隔单位：秒、毫秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> MINUTE_MICROSECOND);
+<span class="hljs-comment">-- 复合型，间隔单位：分、毫秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> MINUTE_SECOND);
+<span class="hljs-comment">-- 复合型，间隔单位：分、秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> HOUR_MICROSECOND);
+<span class="hljs-comment">-- 复合型，间隔单位：小时、毫秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> HOUR_SECOND);
+<span class="hljs-comment">-- 复合型，间隔单位：小时、秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> HOUR_MINUTE);
+<span class="hljs-comment">-- 复合型，间隔单位：小时分</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> DAY_MICROSECOND);
+<span class="hljs-comment">-- 复合型，间隔单位：天、毫秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> DAY_SECOND);
+<span class="hljs-comment">-- 复合型，间隔单位：天、秒</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> DAY_MINUTE);
+<span class="hljs-comment">-- 复合型，间隔单位：天、分</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> DAY_HOUR);
+<span class="hljs-comment">-- 复合型，间隔单位：天、小时</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-variable">@date</span>, <span class="hljs-type">interval</span> <span class="hljs-string">&#x27;1 1&#x27;</span> YEAR_MONTH);
+<span class="hljs-comment">-- 复合型，间隔单位：年、月</span></code></pre></div>
+
+<p>建议：使用 date_add() 日期时间函数来替代 adddate(), addtime()</p>
+<h4 id="为日期减去一个时间间隔：date-sub"><a href="#为日期减去一个时间间隔：date-sub" class="headerlink" title="为日期减去一个时间间隔：date_sub()"></a>为日期减去一个时间间隔：date_sub()</h4><p>date_sub() 日期时间函数 和 date_add() 用法一致</p>
+<p>建议：使用 date_sub() 日期时间函数来替代 subdate(), subtime()</p>
+<h4 id="另类日期函数：period-add-P-N-period-diff-P1-P2"><a href="#另类日期函数：period-add-P-N-period-diff-P1-P2" class="headerlink" title="另类日期函数：period_add(P,N), period_diff(P1,P2)"></a>另类日期函数：period_add(P,N), period_diff(P1,P2)</h4><p>P 的格式为YYYYMM或者 YYMM，第二个参数N 表示增加或减去 N month（月）。</p>
+<p>period_add(P,N)：日期加/减去N月。</p>
+<p>period_diff(P1,P2)：日期 P1-P2，返回 N 个月。</p>
+<h4 id="日期、时间相减函数：datediff-date1-date2-timediff-time1-time2"><a href="#日期、时间相减函数：datediff-date1-date2-timediff-time1-time2" class="headerlink" title="日期、时间相减函数：datediff(date1,date2), timediff(time1,time2)"></a>日期、时间相减函数：datediff(date1,date2), timediff(time1,time2)</h4><p>两个日期相减 date1 - date2，返回天数</p>
+<p>两个日期相减 time1 - time2，返回 time 差值</p>
+<p>注意：timediff(time1,time2) 函数的两个参数类型必须相同。</p>
+<h3 id="MySQL-日期时间转换函数"><a href="#MySQL-日期时间转换函数" class="headerlink" title="MySQL 日期时间转换函数"></a>MySQL 日期时间转换函数</h3><h4 id="时间、秒转换函数：time-to-sec-time-sec-to-time-seconds"><a href="#时间、秒转换函数：time-to-sec-time-sec-to-time-seconds" class="headerlink" title="时间、秒转换函数：time_to_sec(time), sec_to_time(seconds)"></a>时间、秒转换函数：time_to_sec(time), sec_to_time(seconds)</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> time_to_sec(<span class="hljs-string">&#x27;01:00:00&#x27;</span>);
+<span class="hljs-keyword">select</span> sec_to_time(<span class="hljs-number">3600</span>);</code></pre></div>
+
+<h4 id="日期、天数转换函数：to-days-date-from-days-days"><a href="#日期、天数转换函数：to-days-date-from-days-days" class="headerlink" title="日期、天数转换函数：to_days(date), from_days(days)"></a>日期、天数转换函数：to_days(date), from_days(days)</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> to_days(CURDATE());
+<span class="hljs-keyword">select</span> from_days(<span class="hljs-number">738616</span>);</code></pre></div>
+
+<h4 id="字符串转换为日期函数：str-to-date-str-format"><a href="#字符串转换为日期函数：str-to-date-str-format" class="headerlink" title="字符串转换为日期函数：str_to_date(str, format)"></a>字符串转换为日期函数：str_to_date(str, format)</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> str_to_date(<span class="hljs-string">&#x27;01/01/2022&#x27;</span>, <span class="hljs-string">&#x27;%d/%m/%Y&#x27;</span>);
+<span class="hljs-keyword">select</span> str_to_date(<span class="hljs-string">&#x27;01/01/20&#x27;</span>, <span class="hljs-string">&#x27;%d/%m/%y&#x27;</span>);
+<span class="hljs-keyword">select</span> str_to_date(<span class="hljs-string">&#x27;01.01.2022&#x27;</span>, <span class="hljs-string">&#x27;%d.%m.%Y&#x27;</span>);
+<span class="hljs-comment">-- 此处要注意sql_mode模式 NO_ZERO_DATE NO_ZERO_IN_DATE 为关闭情况</span>
+<span class="hljs-keyword">select</span> str_to_date(<span class="hljs-string">&#x27;12:00:00&#x27;</span>, <span class="hljs-string">&#x27;%H:%i:%s&#x27;</span>);
+<span class="hljs-keyword">select</span> str_to_date(<span class="hljs-string">&#x27;01.01.2022 12:00:00&#x27;</span>, <span class="hljs-string">&#x27;%d.%m.%Y %H:%i:%s&#x27;</span>);</code></pre></div>
+
+<h4 id="日期-时间转换为字符串函数：date-format-date-format-time-format-time-format"><a href="#日期-时间转换为字符串函数：date-format-date-format-time-format-time-format" class="headerlink" title="日期/时间转换为字符串函数：date_format(date,format), time_format(time,format)"></a>日期/时间转换为字符串函数：date_format(date,format), time_format(time,format)</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> date_format(<span class="hljs-string">&#x27;2022-01-01 12:00:00&#x27;</span>, <span class="hljs-string">&#x27;%W %M %Y&#x27;</span>);
+<span class="hljs-keyword">select</span> date_format(<span class="hljs-string">&#x27;2022-01-01 12:00:00&#x27;</span>, <span class="hljs-string">&#x27;%Y%m%d%H%i%s&#x27;</span>);
+<span class="hljs-keyword">select</span> date_format(<span class="hljs-string">&#x27;12:00:00&#x27;</span>, <span class="hljs-string">&#x27;%H.%i.%s&#x27;</span>);</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>格式标识符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%a</td>
+<td>缩写星期名</td>
+</tr>
+<tr>
+<td>%b</td>
+<td>缩写月名</td>
+</tr>
+<tr>
+<td>%c</td>
+<td>月，数值</td>
+</tr>
+<tr>
+<td>%D</td>
+<td>带有英文前缀的月中的天</td>
+</tr>
+<tr>
+<td>%d</td>
+<td>月的天，数值(00-31)</td>
+</tr>
+<tr>
+<td>%e</td>
+<td>月的天，数值(0-31)</td>
+</tr>
+<tr>
+<td>%f</td>
+<td>微秒</td>
+</tr>
+<tr>
+<td>%H</td>
+<td>小时 (00-23)</td>
+</tr>
+<tr>
+<td>%h</td>
+<td>小时 (01-12)</td>
+</tr>
+<tr>
+<td>%I</td>
+<td>小时 (01-12)</td>
+</tr>
+<tr>
+<td>%i</td>
+<td>分钟，数值(00-59)</td>
+</tr>
+<tr>
+<td>%j</td>
+<td>年的天 (001-366)</td>
+</tr>
+<tr>
+<td>%k</td>
+<td>小时 (0-23)</td>
+</tr>
+<tr>
+<td>%l</td>
+<td>小时 (1-12)</td>
+</tr>
+<tr>
+<td>%M</td>
+<td>月名</td>
+</tr>
+<tr>
+<td>%m</td>
+<td>月，数值(00-12)</td>
+</tr>
+<tr>
+<td>%p</td>
+<td>AM 或 PM</td>
+</tr>
+<tr>
+<td>%r</td>
+<td>时间，12-小时（hh:mm:ss AM 或 PM）</td>
+</tr>
+<tr>
+<td>%S</td>
+<td>秒(00-59)</td>
+</tr>
+<tr>
+<td>%s</td>
+<td>秒(00-59)</td>
+</tr>
+<tr>
+<td>%T</td>
+<td>时间, 24-小时 (hh:mm:ss)</td>
+</tr>
+<tr>
+<td>%U</td>
+<td>周 (00-53) 星期日是一周的第一天</td>
+</tr>
+<tr>
+<td>%u</td>
+<td>周 (00-53) 星期一是一周的第一天</td>
+</tr>
+<tr>
+<td>%V</td>
+<td>周 (01-53) 星期日是一周的第一天，与 %X 使用</td>
+</tr>
+<tr>
+<td>%v</td>
+<td>周 (01-53) 星期一是一周的第一天，与 %x 使用</td>
+</tr>
+<tr>
+<td>%W</td>
+<td>星期名</td>
+</tr>
+<tr>
+<td>%w</td>
+<td>周的天 （0=星期日, 6=星期六）</td>
+</tr>
+<tr>
+<td>%X</td>
+<td>年，其中的星期日是周的第一天，4 位，与 %V 使用</td>
+</tr>
+<tr>
+<td>%x</td>
+<td>年，其中的星期一是周的第一天，4 位，与 %v 使用</td>
+</tr>
+<tr>
+<td>%Y</td>
+<td>年，4 位</td>
+</tr>
+<tr>
+<td>%y</td>
+<td>年，2 位</td>
+</tr>
+</tbody></table>
+<h4 id="拼凑日期、时间函数：makdedate-year-dayofyear-maketime-hour-minute-second"><a href="#拼凑日期、时间函数：makdedate-year-dayofyear-maketime-hour-minute-second" class="headerlink" title="拼凑日期、时间函数：makdedate(year,dayofyear), maketime(hour,minute,second)"></a>拼凑日期、时间函数：makdedate(year,dayofyear), maketime(hour,minute,second)</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> makedate(<span class="hljs-number">2022</span>, <span class="hljs-number">31</span>);
+<span class="hljs-keyword">select</span> makedate(<span class="hljs-number">2022</span>, <span class="hljs-number">32</span>);
+<span class="hljs-keyword">select</span> maketime(<span class="hljs-number">12</span>, <span class="hljs-number">00</span>, <span class="hljs-number">00</span>);</code></pre></div>
+
+<h3 id="MySQL-时间戳函数"><a href="#MySQL-时间戳函数" class="headerlink" title="MySQL 时间戳函数"></a>MySQL 时间戳函数</h3><h4 id="获得当前时间戳函数：current-timestamp-current-timestamp"><a href="#获得当前时间戳函数：current-timestamp-current-timestamp" class="headerlink" title="获得当前时间戳函数：current_timestamp, current_timestamp()"></a>获得当前时间戳函数：current_timestamp, current_timestamp()</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-built_in">current_timestamp</span>, <span class="hljs-built_in">current_timestamp</span>();</code></pre></div>
+
+<h4 id="Unix-时间戳、日期转换函数："><a href="#Unix-时间戳、日期转换函数：" class="headerlink" title="Unix 时间戳、日期转换函数："></a>Unix 时间戳、日期转换函数：</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> unix_timestamp();
+<span class="hljs-keyword">select</span> unix_timestamp(<span class="hljs-string">&#x27;2022-01-01&#x27;</span>);
+<span class="hljs-keyword">select</span> unix_timestamp(<span class="hljs-string">&#x27;2022-01-01 12:00:00&#x27;</span>);
+<span class="hljs-keyword">select</span> from_unixtime(<span class="hljs-number">1641009600</span>);
+<span class="hljs-keyword">select</span> from_unixtime(<span class="hljs-number">1641009600</span>, <span class="hljs-string">&#x27;%Y %d %m %H:%i:%s&#x27;</span>);</code></pre></div>
+
+<h4 id="时间戳（timestamp）转换、增、减函数："><a href="#时间戳（timestamp）转换、增、减函数：" class="headerlink" title="时间戳（timestamp）转换、增、减函数："></a>时间戳（timestamp）转换、增、减函数：</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-type">timestamp</span> (<span class="hljs-string">&#x27;2022-01-01&#x27;</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-type">timestamp</span> (<span class="hljs-string">&#x27;2022-01-01 08:00:00&#x27;</span>, <span class="hljs-string">&#x27;01:01:01&#x27;</span>);
+<span class="hljs-keyword">select</span> <span class="hljs-type">timestamp</span> (<span class="hljs-string">&#x27;2022-01-01 08:00:00&#x27;</span>, <span class="hljs-string">&#x27;10 01:01:01&#x27;</span>);
+<span class="hljs-keyword">select</span> timestampadd(<span class="hljs-keyword">day</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;2022-01-01 08:00:00&#x27;</span>);
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-string">&#x27;2022-01-01 08:00:00&#x27;</span>, <span class="hljs-type">interval</span> <span class="hljs-number">1</span> <span class="hljs-keyword">day</span>);
+<span class="hljs-keyword">select</span> timestampdiff(<span class="hljs-keyword">year</span>,<span class="hljs-string">&#x27;2022-01-01&#x27;</span>, <span class="hljs-string">&#x27;2021-01-01&#x27;</span>);
+<span class="hljs-keyword">select</span> timestampdiff(<span class="hljs-keyword">day</span> ,<span class="hljs-string">&#x27;2022-01-01&#x27;</span>, <span class="hljs-string">&#x27;2022-01-02&#x27;</span>);
+<span class="hljs-keyword">select</span> timestampdiff(<span class="hljs-keyword">hour</span>,<span class="hljs-string">&#x27;2022-01-01 00:00:00&#x27;</span>, <span class="hljs-string">&#x27;2022-01-01 08:00:00&#x27;</span>);
+<span class="hljs-keyword">select</span> datediff(<span class="hljs-string">&#x27;2022-01-01 12:00:00&#x27;</span>, <span class="hljs-string">&#x27;2022-01-01 00:00:00&#x27;</span>);</code></pre></div>
+
+<h4 id="时区（timezone）转换函数"><a href="#时区（timezone）转换函数" class="headerlink" title="时区（timezone）转换函数"></a>时区（timezone）转换函数</h4><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> convert_tz(<span class="hljs-string">&#x27;2022-01-01 12:00:00&#x27;</span>, <span class="hljs-string">&#x27;+08:00&#x27;</span>, <span class="hljs-string">&#x27;+00:00&#x27;</span>);
+<span class="hljs-comment">-- 时区转换也可以通过 date_add, date_sub, timestampadd 来实现。</span>
+<span class="hljs-keyword">select</span> date_add(<span class="hljs-string">&#x27;2022-01-01 12:00:00&#x27;</span>, <span class="hljs-type">interval</span> <span class="hljs-number">-8</span> <span class="hljs-keyword">hour</span>);
+<span class="hljs-keyword">select</span> date_sub(<span class="hljs-string">&#x27;2022-01-01 12:00:00&#x27;</span>, <span class="hljs-type">interval</span> <span class="hljs-number">8</span> <span class="hljs-keyword">hour</span>);
+<span class="hljs-keyword">select</span> timestampadd(<span class="hljs-keyword">hour</span>, <span class="hljs-number">-8</span>, <span class="hljs-string">&#x27;2022-01-01 12:00:00&#x27;</span>);</code></pre></div>
+
+<h1 id="1-数据查询"><a href="#1-数据查询" class="headerlink" title="1. 数据查询"></a>1. 数据查询</h1><p><strong>SELECT</strong>: 用于从数据库中选择数据</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column1
+<span class="hljs-keyword">FROM</span> table_name;
+<span class="hljs-keyword">SELECT</span> column1, column2 <span class="hljs-keyword">as</span> c2
+<span class="hljs-keyword">FROM</span> table_name;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name;</code></pre></div>
+
+<p><strong>DISTINCT</strong>: 用于过滤掉重复的值并返回指定列的行</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> column_name
+<span class="hljs-keyword">FROM</span> table_name;</code></pre></div>
+
+<p><strong>WHERE</strong>: 用于过滤记录/行</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column1, column2
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> condition1
+  <span class="hljs-keyword">AND</span> condition2;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> condition1
+   <span class="hljs-keyword">OR</span> condition2;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">condition</span>;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> condition1
+  <span class="hljs-keyword">AND</span> (condition2 <span class="hljs-keyword">OR</span> condition3);
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> column_name <span class="hljs-keyword">FROM</span> table_name <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>);</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="center">操作符</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">=</td>
+<td align="center">等于</td>
+</tr>
+<tr>
+<td align="center">&lt;&gt;</td>
+<td align="center">不等于</td>
+</tr>
+<tr>
+<td align="center">!=</td>
+<td align="center">不等于</td>
+</tr>
+<tr>
+<td align="center">&lt;</td>
+<td align="center">小于</td>
+</tr>
+<tr>
+<td align="center">&gt;</td>
+<td align="center">大于</td>
+</tr>
+<tr>
+<td align="center">&lt;=</td>
+<td align="center">小于等于</td>
+</tr>
+<tr>
+<td align="center">&gt;=</td>
+<td align="center">大于等于</td>
+</tr>
+<tr>
+<td align="center">!&lt;</td>
+<td align="center">不小于</td>
+</tr>
+<tr>
+<td align="center">!&gt;</td>
+<td align="center">不大于</td>
+</tr>
+<tr>
+<td align="center">BETWEEN END</td>
+<td align="center">在指定值之间</td>
+</tr>
+<tr>
+<td align="center">IS NULL</td>
+<td align="center">为null</td>
+</tr>
+</tbody></table>
+<p><strong>ORDER BY</strong>: 用于结果集的排序，升序（ASC）或者降序（DESC）</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">column</span>;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">column</span> <span class="hljs-keyword">DESC</span>;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> column1 <span class="hljs-keyword">ASC</span>, column2 <span class="hljs-keyword">DESC</span>;</code></pre></div>
+
+<p><strong>SELECT TOP</strong>: 用于指定从表顶部返回的记录数</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> TOP number columns_names
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;
+<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-keyword">percent</span> columns_names
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;</code></pre></div>
+
+<p>并非所有数据库系统都支持SELECT TOP。 <strong>MySQL</strong> 中是LIMIT子句</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table_name LIMIT
+<span class="hljs-keyword">offset</span>, count;</code></pre></div>
+
+<p><strong>LIKE</strong>: 用于搜索列中的特定模式，WHERE 子句中使用的运算符<br><code>%</code> (percent sign) 是一个表示零个，一个或多个字符的通配符<br><code>_</code> (underscore) 是一个表示单个字符通配符</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> column_name <span class="hljs-keyword">LIKE</span> <span class="hljs-keyword">pattern</span>;
+
+<span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;a%&#x27;</span>
+（查找任何以
+“a
+”开头的值
+）
+<span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%a&#x27;</span>
+（查找任何以
+“a
+”结尾的值
+）
+<span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%or%&#x27;</span>
+（查找任何包含
+“<span class="hljs-keyword">or</span>
+”的值
+）
+<span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;_r%&#x27;</span>
+（查找任何第二位是
+“r
+”的值
+）
+<span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;a_%_%&#x27;</span>
+（查找任何以
+“a
+”开头且长度至少为<span class="hljs-number">3</span>的值
+）
+<span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;[a-c]%&#x27;</span>
+（查找任何以
+“a
+”或
+“b
+”或
+“c
+”开头的值
+）</code></pre></div>
+
+<p><strong>IN</strong>: 用于在 WHERE 子句中指定多个值的运算符</p>
+<ul>
+<li>本质上，IN运算符是多个OR条件的简写</li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> column_name <span class="hljs-keyword">IN</span> (value1, value2, …);
+<span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> column_name <span class="hljs-keyword">IN</span> (<span class="hljs-keyword">SELECT</span> STATEMENT);</code></pre></div>
+
+<p><strong>BETWEEN</strong>: 用于过滤给定范围的值的运算符</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> column_name <span class="hljs-keyword">BETWEEN</span> value1 <span class="hljs-keyword">AND</span> value2;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> (column_name <span class="hljs-keyword">BETWEEN</span> value1 <span class="hljs-keyword">AND</span> value2)
+  <span class="hljs-keyword">AND</span> <span class="hljs-keyword">NOT</span> column_name2 <span class="hljs-keyword">IN</span> (value3, value4);
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> column_name <span class="hljs-keyword">BETWEEN</span> #<span class="hljs-number">01</span> <span class="hljs-operator">/</span> <span class="hljs-number">07</span> <span class="hljs-operator">/</span> <span class="hljs-number">1999</span># <span class="hljs-keyword">AND</span> #<span class="hljs-number">03</span> <span class="hljs-operator">/</span> <span class="hljs-number">12</span> <span class="hljs-operator">/</span> <span class="hljs-number">1999</span>#;</code></pre></div>
+
+<p><strong>NULL</strong>: 代表一个字段没有值</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> column_name <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span>;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> column_name <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>;</code></pre></div>
+
+<p><strong>AS</strong>: 用于给表或者列分配别名</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_name <span class="hljs-keyword">AS</span> alias_name
+<span class="hljs-keyword">FROM</span> table_name;
+<span class="hljs-keyword">SELECT</span> column_name
+<span class="hljs-keyword">FROM</span> table_name <span class="hljs-keyword">AS</span> alias_name;
+<span class="hljs-keyword">SELECT</span> column_name <span class="hljs-keyword">AS</span> alias_name1, column_name2 <span class="hljs-keyword">AS</span> alias_name2;
+<span class="hljs-keyword">SELECT</span> column_name1, column_name2 <span class="hljs-operator">+</span> ‘, ‘ <span class="hljs-operator">+</span> column_name3 <span class="hljs-keyword">AS</span> alias_name;</code></pre></div>
+
+<p><strong>UNION</strong>: 用于组合两个或者多个 SELECT 语句的结果集的运算符</p>
+<ul>
+<li>每个 SELECT 语句必须拥有相同的列数</li>
+<li>列必须拥有相似的数据类型</li>
+<li>每个 SELECT 语句中的列也必须具有相同的顺序</li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> columns_names
+<span class="hljs-keyword">FROM</span> table1
+<span class="hljs-keyword">UNION</span>
+<span class="hljs-keyword">SELECT</span> column_name
+<span class="hljs-keyword">FROM</span> table2;
+<span class="hljs-keyword">UNION</span> 仅允许选择不同的值, <span class="hljs-keyword">UNION</span> <span class="hljs-keyword">ALL</span> 允许重复</code></pre></div>
+
+<p><strong>ANY|ALL</strong>: 用于检查 WHERE 或 HAVING 子句中使用的子查询条件的运算符</p>
+<ul>
+<li>ANY 如果任何子查询值满足条件，则返回 true。</li>
+<li>ALL 如果所有子查询值都满足条件，则返回 true。</li>
+</ul>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> columns_names
+<span class="hljs-keyword">FROM</span> table1
+<span class="hljs-keyword">WHERE</span> column_name operator (<span class="hljs-keyword">ANY</span><span class="hljs-operator">|</span><span class="hljs-keyword">ALL</span>) (<span class="hljs-keyword">SELECT</span> column_name <span class="hljs-keyword">FROM</span> table_name <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>);</code></pre></div>
+
+<p><strong>GROUP BY</strong>: 通常与聚合函数（COUNT，MAX，MIN，SUM，AVG）一起使用，用于将结果集分组为一列或多列</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_name1, <span class="hljs-built_in">COUNT</span>(column_name2)
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> column_name1
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-built_in">COUNT</span>(column_name2) <span class="hljs-keyword">DESC</span>;</code></pre></div>
+
+<p><strong>HAVING</strong>: HAVING 子句指定 SELECT 语句应仅返回聚合值满足指定条件的行。它被添加到 SQL 语言中，因为WHERE关键字不能与聚合函数一起使用。</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">COUNT</span>(column_name1), column_name2
+<span class="hljs-keyword">FROM</span> <span class="hljs-keyword">table</span>
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> column_name2
+<span class="hljs-keyword">HAVING</span> ``<span class="hljs-built_in">COUNT</span>(column_name1) <span class="hljs-operator">&gt;</span> <span class="hljs-number">5</span>;</code></pre></div>
+
+<h1 id="2-数据操作"><a href="#2-数据操作" class="headerlink" title="2. 数据操作"></a>2. 数据操作</h1><p><strong>INSERT INTO</strong>: 用于在表中插入新记录/行</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> table_name (column1, column2)
+<span class="hljs-keyword">VALUES</span> (value1, value2);
+<span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> table_name
+<span class="hljs-keyword">VALUES</span> (value1, value2 …);</code></pre></div>
+
+<p><strong>UPDATE</strong>: 用于修改表中的现有记录/行</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">UPDATE</span> table_name
+<span class="hljs-keyword">SET</span> column1 <span class="hljs-operator">=</span> value1,
+    column2 <span class="hljs-operator">=</span> value2
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;
+<span class="hljs-keyword">UPDATE</span> table_name
+<span class="hljs-keyword">SET</span> column_name <span class="hljs-operator">=</span> <span class="hljs-keyword">value</span>;</code></pre></div>
+
+<p><strong>DELETE</strong>: 用于删除表中的现有记录/行</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">DELETE</span>
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;
+<span class="hljs-keyword">DELETE</span>
+<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> table_name;</code></pre></div>
+
+<p><strong>TRUNCATE</strong> : 用于删除表中的现有记录</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">TRUNCATE</span> table_name;</code></pre></div>
+
+<h1 id="3-聚合查询"><a href="#3-聚合查询" class="headerlink" title="3. 聚合查询"></a>3. 聚合查询</h1><p><strong>COUNT</strong>: 返回出现次数</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-keyword">DISTINCT</span> column_name);</code></pre></div>
+
+<p><strong>MIN() and MAX()</strong>: 返回所选列的最小/最大值</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">MIN</span>(column_names)
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">MAX</span>(column_names)
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;</code></pre></div>
+
+<p><strong>AVG()</strong>: 返回数字列的平均值</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">AVG</span>(column_name)
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;</code></pre></div>
+
+<p><strong>SUM()</strong>: 返回数值列的总和</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">SUM</span>(column_name)
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;</code></pre></div>
+
+<h1 id="4-连接查询"><a href="#4-连接查询" class="headerlink" title="4. 连接查询"></a>4. 连接查询</h1><p><strong>INNER JOIN</strong>: 内连接，返回在两张表中具有匹配值的记录</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table1
+         <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> table2
+                    <span class="hljs-keyword">ON</span> table1.column_name <span class="hljs-operator">=</span> table2.column_name;
+
+<span class="hljs-keyword">SELECT</span> table1.column_name1, table2.column_name2, table3.column_name3
+<span class="hljs-keyword">FROM</span> ((table1 <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> table2 ONrelationship)
+         <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span> table3 <span class="hljs-keyword">ON</span> relationship);</code></pre></div>
+
+<p><strong>LEFT (OUTER) JOIN</strong>: 左外连接，返回左表（table1）中的所有记录，以及右表中的匹配记录（table2）</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table1
+         <span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">JOIN</span>
+     table2 <span class="hljs-keyword">ON</span> table1.column_name <span class="hljs-operator">=</span> table2.column_name;</code></pre></div>
+
+<p><strong>RIGHT (OUTER) JOIN</strong>: 右外连接，返回右表（table2）中的所有记录，以及左表（table1）中匹配的记录</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table1
+         <span class="hljs-keyword">RIGHT</span> <span class="hljs-keyword">JOIN</span>
+     table2 <span class="hljs-keyword">ON</span> table1.column_name <span class="hljs-operator">=</span> table2.column_name;</code></pre></div>
+
+<p><strong>FULL (OUTER) JOIN</strong>: 全外连接，全连接是左右外连接的并集. 连接表包含被连接的表的所有记录, 如果缺少匹配的记录, 以 NULL 填充。</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table1
+         <span class="hljs-keyword">FULL</span> <span class="hljs-keyword">OUTER</span> <span class="hljs-keyword">JOIN</span>
+     table2 <span class="hljs-keyword">ON</span> table1.column_name <span class="hljs-operator">=</span> table2.column_name;</code></pre></div>
+
+<p><strong>Self JOIN</strong>: 自连接，表自身连接</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> column_names
+<span class="hljs-keyword">FROM</span> table1 T1,
+     table1 T2
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;</code></pre></div>
+
+<h1 id="5-视图查询"><a href="#5-视图查询" class="headerlink" title="5. 视图查询"></a>5. 视图查询</h1><p><strong>CREATE</strong>: 创建视图</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> view_name <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">SELECT</span> column1, column2
+<span class="hljs-keyword">FROM</span> table_name
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">condition</span>;</code></pre></div>
+
+<p><strong>SELECT</strong>: 检索视图</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span> view_name;</code></pre></div>
+
+<p><strong>DROP</strong>: 删除视图</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">VIEW</span> view_name;</code></pre></div>
+
+<h1 id="6-修改"><a href="#6-修改" class="headerlink" title="6. 修改"></a>6. 修改</h1><p><strong>ADD</strong>: 添加字段</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> table_name
+    <span class="hljs-keyword">ADD</span> column_name column_definition;</code></pre></div>
+
+<p><strong>MODIFY</strong>: 修改字段数据类型</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> table_name MODIFY column_name column_type;</code></pre></div>
+
+<p><strong>DROP</strong>: 删除字段</p>
+<div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> table_name <span class="hljs-keyword">DROP</span> <span class="hljs-keyword">COLUMN</span> column_name;</code></pre></div>
+
+<h1 id="7-完整性约束"><a href="#7-完整性约束" class="headerlink" title="7.完整性约束"></a>7.完整性约束</h1><h2 id="主键约束"><a href="#主键约束" class="headerlink" title="主键约束"></a>主键约束</h2><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名
+    <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">PRIMARY</span> KEY (主键字段);</code></pre></div>
+
+<h2 id="主键自增"><a href="#主键自增" class="headerlink" title="主键自增"></a>主键自增</h2><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 MODIFY 主键字段 <span class="hljs-type">INT</span> <span class="hljs-keyword">PRIMARY</span> KEY AUTO_INCREMENT;
+<span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 CHANGE 主键字段 主键字段 <span class="hljs-type">INT</span> <span class="hljs-keyword">PRIMARY</span> KEY AUTO_INCREMENT;</code></pre></div>
+
+<h2 id="删除唯一约束"><a href="#删除唯一约束" class="headerlink" title="删除唯一约束"></a>删除唯一约束</h2><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 <span class="hljs-keyword">DROP</span> KEY 字段;</code></pre></div>
+
+<h2 id="非空约束"><a href="#非空约束" class="headerlink" title="非空约束"></a>非空约束</h2><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 MODIFY 字段 <span class="hljs-type">VARCHAR</span> (<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>;
+<span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 CHANGE 字段 字段 <span class="hljs-type">VARCHAR</span> (<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>;</code></pre></div>
+
+<h2 id="默认约束"><a href="#默认约束" class="headerlink" title="默认约束"></a>默认约束</h2><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名
+    <span class="hljs-keyword">ALTER</span> 字段名 <span class="hljs-keyword">SET</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-number">0</span>;</code></pre></div>
+
+<h2 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h2><div class="code-wrapper"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名
+    <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">CONSTRAINT</span> 外键别名 <span class="hljs-keyword">FOREIGN</span> KEY (外键字段) <span class="hljs-keyword">REFERENCES</span> 父表 (主键字段);</code></pre></div>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/tool/" class="category-chain-item">tool</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/sql/">#sql</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SQL速查</div>
+      <div>https://ocrud.com/2022/04/06/SQL速查/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ocrud</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月6日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/10/Redis%E5%BA%94%E7%94%A8-%E6%8A%A2%E8%B4%AD%E4%BC%98%E6%83%A0%E5%88%B8/" title="Redis应用-抢购优惠券">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis应用-抢购优惠券</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/04/%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B1%8D/" title="技术书籍">
+                        <span class="hidden-mobile">技术书籍</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.17/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA","path":"window.location.pathname","placeholder":"来了就说句话把!","avatar":"mp","meta":["nick","mail"],"requiredFields":["nick","mail"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      黑ICP备18004540号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,905 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ocrud">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="arthas学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="arthas学习">
+<meta property="og:url" content="https://ocrud.com/2022/06/15/arthas%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Ocrud">
+<meta property="og:description" content="arthas学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.ocrud.com/img/202206151048290.jpg">
+<meta property="article:published_time" content="2022-06-15T03:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-12T07:03:39.335Z">
+<meta property="article:author" content="ocrud">
+<meta property="article:tag" content="arthas">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.ocrud.com/img/202206151048290.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>arthas学习 - Ocrud</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ocrud.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":"https://lapi.ocrud.com","path":"window.location.pathname","ignore_local":false,"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA"}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Ocrud</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                整理
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/archives/">
+                    
+                    归档
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/categories/">
+                    
+                    分类
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/tags/">
+                    
+                    标签
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                生活
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/">
+                    
+                    书单
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/movies/">
+                    
+                    影单
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-bookmark"></i>
+                工具
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/file/index">
+                    
+                    文件预览
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://file.ocrud.com/">
+                    
+                    个人网盘
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://life.ocrud.com/">
+                    
+                    听听歌曲
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://ocrud.com/dog/dog.html">
+                    
+                    舔狗日记
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://www.processon.com/">
+                    
+                    在线绘图
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" target="_blank" rel="noopener" href="https://app.diagrams.net/">
+                    
+                    在线绘图2
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="https://ocrud.com/nav/#/sim">
+                <i class="iconfont icon-link-fill"></i>
+                导航
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://cdn.ocrud.com/img/202206151048290.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">arthas学习</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-15 11:00" pubdate>
+          2022年6月15日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">arthas学习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="arthas学习"><a href="#arthas学习" class="headerlink" title="arthas学习"></a>arthas学习</h1><h2 id="1-入门必备"><a href="#1-入门必备" class="headerlink" title="1.入门必备"></a>1.入门必备</h2><a class="btn" href="https://github.com/alibaba/arthas/releases"  title="下载地址" target="_blank">下载地址</a>
+<a class="btn" href="https://arthas.aliyun.com/zh-cn/"  title="官方文档" target="_blank">官方文档</a>
+<h2 id="2-实践"><a href="#2-实践" class="headerlink" title="2.实践"></a>2.实践</h2><h3 id="重点命令介绍以及基础使用"><a href="#重点命令介绍以及基础使用" class="headerlink" title="重点命令介绍以及基础使用"></a>重点命令介绍以及基础使用</h3><a class="btn" href="https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&id=arthas-basics"  title="官方基础使用教程" target="_blank">官方基础使用教程</a>
+<h4 id="dashboard命令"><a href="#dashboard命令" class="headerlink" title="dashboard命令"></a>dashboard命令</h4><p>输入<code>dashboard</code>查看当前系统的实时数据面板，例如：服务器thread（线程）信息、内存memory、GC回收等情况，按<code>ctrl+c</code>可以中断执行。<br>数据列说明</p>
+<blockquote>
+<p>ID:  Java级别的线程ID，注意这个ID不能跟jstack中的nativeID一一对应。<br>NAME:  线程名<br>GROUP:  线程组名<br>PRIORITY:  线程优先级, 1~10之间的数字，越大表示优先级越高<br>STATE:  线程的状态<br>%CPU:  线程的cpu使用率。比如采样间隔1000ms，某个线程的增量cpu时间为100ms，则cpu使用率=100/1000=10%<br>DELTA_TIME:  上次采样之后线程运行增量CPU时间，数据格式为秒<br>TIME:  线程运行总CPU时间，数据格式为分:秒<br>INTERRUPTED:  线程当前的中断位状态<br>DAEMON:  是否是daemon线程另外 </p>
+</blockquote>
+<div class="code-wrapper"><pre><code class="hljs bash">面板会默认会每5秒刷新一次，并且会一直刷新下去，如果想要指定刷新次数和间隔时间
+`-i`表示刷新的间隔时间，单位（毫秒），`-n` 表表示查询的次数，到达指定次数后，自动退出dashboard面板；
+dashboard dashboard -i 1000 -n 2</code></pre></div>
+
+<h4 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h4><p>查看线程的堆栈信息，当没有参数时，默认显示第一页的线程信息</p>
+<p>查看某个线程的堆栈：</p>
+<div class="code-wrapper"><pre><code class="hljs bash">thread 1 :1为线程的<span class="hljs-built_in">id</span>
+thread -n 5 :打印前5个最忙的线程并打印堆栈
+thread -all :显示所有匹配的线程
+thread -n 3 -i 1000 :列出1000ms内最忙的3个线程栈
+thread -state WAITING :查看指定状态的线程,（TIMED_WAITI、WAITING、RUNNABLE等等）
+thread -b :找出阻塞其他线程的线程,当出现死锁后，会提示你出现死锁的位置</code></pre></div>
+
+<h4 id="jvm"><a href="#jvm" class="headerlink" title="jvm"></a>jvm</h4><p>查看当前JVM信息<br>jvm显示jvm的数据汇总,具体内容分为以下几块</p>
+<div class="code-wrapper"><pre><code class="hljs bash">runtime： 包括jvm开始时间,启动参数,class_path等
+class-loading ：已加载类的数量,总共加载类数量,已卸载类的数量
+garbage-collectors： 显示使用的垃圾收集器及垃圾收集次数
+memory ：堆内存空间使用情况
+thread： 线程总数,守护线程数,死锁数量
+thread线程相关信息如下
+COUNT: JVM当前活跃的线程数
+DAEMON-COUNT: JVM当前活跃的守护线程数
+PEAK-COUNT: 从JVM启动开始曾经活着的最大线程数
+STARTED-COUNT: 从JVM启动开始总共启动过的线程次数
+DEADLOCK-COUNT: JVM当前死锁的线程数</code></pre></div>
+
+<h4 id="vmoption"><a href="#vmoption" class="headerlink" title="vmoption"></a>vmoption</h4><p>这个命令可以看到我们的java项目在运行时设置了哪些参数，命令没有参数时会打印所有的vm参数</p>
+<p>查看单个参数和动态设置参数功能，这里可以动态更新参数，不需要重启java进程</p>
+<div class="code-wrapper"><pre><code class="hljs bash">查看/更新虚拟机参数
+vmoption
+查看指定的vm参数
+vmoption PrintGCDetails 
+更新指定的vm参数
+vmoption PrintGCDetails <span class="hljs-literal">true</span></code></pre></div>
+
+<h4 id="ognl"><a href="#ognl" class="headerlink" title="ognl"></a>ognl</h4><p>动态执行代码 </p>
+<div class="code-wrapper"><pre><code class="hljs bash">调用静态方法
+ognl <span class="hljs-string">&#x27;@java.lang.System@out.println(&quot;123&quot;)&#x27;</span>
+执行后，可以看到控制台打印了123</code></pre></div>
+
+<h4 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h4><p>查看jvm已加载的类信息</p>
+<div class="code-wrapper"><pre><code class="hljs bash">sc com.ocrud.Application
+加上`-d`参数可以打印类的详细信息，并且还可以查看你这个类在哪个jar包里面
+sc -d com.ocrud.Application
+模糊查询
+sc -d *.Test ：查询所有类名为Test的类
+sc -d com.*：查询com包下面所有的类，会往所有的子包遍历</code></pre></div>
+
+<h4 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h4><p>查看已加载的类方法信息</p>
+<h4 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h4><p>方法执行监控</p>
+<div class="code-wrapper"><pre><code class="hljs bash">monitor -c 1 -n 2 com.xxx.类名 方法名
+其中-c 1 表示监控周期，每一秒监控一次，如果不指定，默认是120秒周期
+-n 2 表示一共监控2次</code></pre></div>
+
+<h4 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h4><p>方法执行数据观测<br>watch命令可以让用户能方便的观察到指定方法的调用情况。能观察到的范围为：返回值、抛出异常、入参，通过编写 OGNL 表达式进行对应变量的查看。<br>1、以下命令用于观察方法出参和返回值，</p>
+<div class="code-wrapper"><pre><code class="hljs bash">watch com.xxx.类名 方法名 <span class="hljs-string">&quot;&#123;params,returnObj&#125;&quot;</span> -x 2 -b -e -s -f 
+<span class="hljs-string">&quot;&#123;params,returnObj&#125;&quot;</span>是观察表达式，是一个ognl表达式，
+-x 2是指定输出结果的属性遍历深度，默认值为1，为1时看不到参数的具体值，只能看到类型；
+-b：在方法调用之前观察，用此命令可查看方法的入参
+-e：在方法异常之后观察。用此命令可查看方法抛出的异常
+-s：在方法返回之后观察，可查看方法的返回值
+-f：在方法结束之后(正常返回和异常返回)观察，可查看方法的返回值和异常信息，默认打开-f</code></pre></div>
+
+<h2 id="3-进阶使用"><a href="#3-进阶使用" class="headerlink" title="3.进阶使用"></a>3.进阶使用</h2><a class="btn" href="https://arthas.aliyun.com/doc/arthas-tutorials.html?language=cn&id=arthas-advanced"  title="官方进阶使用教程" target="_blank">官方进阶使用教程</a>
+
+
+<h4 id="1-热修改代码"><a href="#1-热修改代码" class="headerlink" title="1. 热修改代码"></a>1. 热修改代码</h4><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment">#下载执行</span>
+wget https://arthas.aliyun.com/arthas-boot.jar ; java -jar arthas-boot.jar
+<span class="hljs-comment">#可能需要sudo权限,不然网络权限不足</span>
+jad --&gt; mc --&gt; redefine
+
+<span class="hljs-comment">#1.反编译输出</span>
+jad --source-only com.ocrud.Application &gt; ./Application.java
+
+<span class="hljs-comment">#2.搜索到对应类的classloader</span>
+sc -d *Application |grep classLoader
+
+<span class="hljs-comment">#3.用指定的classloader重新将类在内存中编译</span>
+mc -c classLoader的code ./Application.java -d ./
+
+<span class="hljs-comment">#4.重新热加载(无需重启服务),并且非侵入, 只是临时修改</span>
+redefine /root/api/com/ocrud/Application.class
+
+<span class="hljs-comment">#5.记得删除掉生成的临时文件</span></code></pre></div>
+
+<h4 id="2-定位报错"><a href="#2-定位报错" class="headerlink" title="2. 定位报错"></a>2. 定位报错</h4><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># 观察方法的入参值,返回值,抛出异常三个常用参数就行了</span>
+watch com.ocrud.Application * <span class="hljs-string">&#x27;&#123;params,returnObj,throwExp&#125;&#x27;</span> -x 3 <span class="hljs-comment">#展开3层异常栈</span>
+
+<span class="hljs-comment"># 一般watch就能秒杀500报错这种问题了,trace能帮我们把时间消耗用树形输出, 就会更清晰</span>
+trace com.ocrud.Application * 
+
+<span class="hljs-comment">#监控类、方法的调用进行监控，调用次数、成功次数、失败次数、平均响应时长、失败率等</span>
+monitor -c 3 com.ocrud.Application *</code></pre></div>
+
+<h4 id="3-常用的正则和通配符"><a href="#3-常用的正则和通配符" class="headerlink" title="3. 常用的正则和通配符"></a>3. 常用的正则和通配符</h4><a class="btn" href="ttps://github.com/alibaba/arthas/issues/11"  title="活用ognl表达式" target="_blank">活用ognl表达式</a>
+
+<h4 id="4-获取Spring-Context"><a href="#4-获取Spring-Context" class="headerlink" title="4.获取Spring Context"></a>4.获取Spring Context</h4><div class="code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment">#使用tt命令获取到spring context</span>
+tt -t org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter invokeHandlerMethod
+
+<span class="hljs-comment">#使用tt命令从调用记录里获取到spring context</span>
+tt -i 1000 -w <span class="hljs-string">&#x27;target.getApplicationContext()&#x27;</span>
+<span class="hljs-comment">#获取spring bean，并调用函数</span>
+tt -i 1000 -w <span class="hljs-string">&#x27;target.getApplicationContext().getBean(&quot;类名&quot;).方法名()&#x27;</span></code></pre></div>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/arthas/" class="category-chain-item">arthas</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/arthas/">#arthas</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>arthas学习</div>
+      <div>https://ocrud.com/2022/06/15/arthas学习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ocrud</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年6月15日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/27/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">正则表达式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/25/%E7%AE%97%E6%B3%95%E8%AE%B0%E5%BD%95/" title="算法记录">
+                        <span class="hidden-mobile">算法记录</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.17/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"QQI6XFbMQy7BNfHIiIaWmBTx-gzGzoHsz","appKey":"AgVyfk18mSAPQlUlg8PJ2ApA","path":"window.location.pathname","placeholder":"来了就说句话把!","avatar":"mp","meta":["nick","mail"],"requiredFields":["nick","mail"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      黑ICP备18004540号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
